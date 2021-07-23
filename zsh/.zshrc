@@ -2,15 +2,32 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-export ZSH="/Users/thaohv1/.oh-my-zsh"
-export PATH="$PATH:/Users/thaohv1/.cargo/bin"
-export PATH="/Users/thaohv1/dev/flutter/bin:$PATH"
-export PATH="/Users/thaohv1/dev/flutter/bin/cache/dart-sdk/bin:$PATH"
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-export PATH="/usr/local/Cellar/ruby/2.6.5/bin:$PATH"
-# Set name of the theme to load --- if set to "random", it will
+export ZSH="/Users/thaohan/.oh-my-zsh"
+export ANDROID_HOME="/Users/thaohan/Library/Android/sdk"
+export FLUTTER="/Users/thaohan/dev/projects/flutter/bin"
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
+# export JAVA_HOME="/opt/homebrew/opt/openjdk"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+export EDITOR=nvim
+export GOLANG_BIN="/Users/thaohan/go/bin"
+export GOPATH="/Users/thaohan/go"
 
+
+if ! [[ $PATH == *"$FLUTTER"* ]]; then
+  export PATH="$PATH:$FLUTTER"
+fi
+if ! [[ $PATH == *"$JAVA_BIN"* ]]; then
+  export PATH="$PATH:$JAVA_BIN"
+fi
+if ! [[ $PATH == *"$GOLANG_BIN"* ]]; then
+  export PATH="$PATH:$GOLANG_BIN"
+fi
+if ! [[ $PATH == *"$ANDROID_HOME"* ]]; then
+  export PATH="$PATH:$ANDROID_HOME"
+fi
+
+# Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
@@ -18,7 +35,7 @@ ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -39,7 +56,7 @@ ZSH_THEME="robbyrussell"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -51,6 +68,8 @@ ZSH_THEME="robbyrussell"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
+# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
+# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -70,15 +89,18 @@ ZSH_THEME="robbyrussell"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git flutter)
+
 
 source $ZSH/oh-my-zsh.sh
+source ~/.aliases
 
-# User configuration
+
+
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -103,14 +125,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias rvslack="~/scripts/rvslack.py"
-eval $(thefuck --alias fuck)
-eval $(thefuck --alias FUCK)
-eval $(thefuck --alias fvck)
-
+alias lg="lazygit"
+# fzf key bindings 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source /Users/thaohv1/Library/Preferences/org.dystroy.broot/launcher/bash/br
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
+alias luamake=/Users/thaohan/dev/gitprojects/lua-language-server/3rd/luamake/luamake
