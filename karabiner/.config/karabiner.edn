@@ -1,0 +1,115 @@
+{:profiles
+ {:Goku {:default true :sim 50 :delay 500 :alone 500 :held 500}}
+ :tos       {:same_wind_app   {:key :grave_accent_and_tilde :modi [:left_command] :lazy true}
+             :prev_app        {:key :tab :modi [:left_command] :lazy true}
+             :left_paren      {:key :9 :modi [:left_shift] :lazy true}
+             :right_paren     {:key :0 :modi [:left_shift] :lazy true}
+             :home_dir        [{:key :grave_accent_and_tilde :modi [:left_shift] :lazy true}
+                               {:key :slash}]
+             :regex_match_any [{:key :period}
+                               {:key :8 :modi [:left_shift] :lazy true}]
+             :select_cn       {:select_input_source
+                               {:input_mode_id   ""
+                                :input_source_id "com.apple.keylayout.US"
+                                :language        "en"}}
+             :select_abc      {:select_input_source
+                               {:input_source_id "^com\\.apple\\.keylayout\\.ABC$"}}}
+ :modifiers {:ro :right_option}
+ :templates {:launch     "osascript -e 'tell application \"Alfred 4\" to run trigger \"launch%s\" in workflow \"yqrashawn.workflow.launcher\" with argument \"\"'"
+             :alf        "open /Applications/Alfred\\ 4.app && osascript -e 'tell application \"Alfred 4\" to run trigger \"%s\" in workflow \"%s\"'"
+             :km         "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+             :kb-maestro "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+             :open       "open \"%s\""
+             :opena      "open -a \"%s\""
+             :show       "osascript -e 'set appName to \"%s\"\nset startIt to false\ntell application \"System Events\"\n  if not (exists process appName) then\n    set startIt to true\n  else\n    set frontmost of process appName to true\n  end if\nend tell\nif startIt then\n  tell application appName to activate\nend if'\n"
+             :toggle     "osascript -e 'set appName to \"%s\"\nset startIt to false\ntell application \"System Events\"\n  if not (exists process appName) then\n    set startIt to true\n  else if frontmost of process appName then\n    set visible of process appName to false\n  else\n    set frontmost of process appName to true\n  end if\nend tell\nif startIt then\n  tell application appName to activate\nend if'"
+             :type       "osascript -e 'tell application \"System Events\" to keystroke \"%s\" as text'"
+             ;; :focus      "/usr/local/bin/yabai -m display --focus \"%s\" & /usr/local/bin/yabai -m space --focus \"%s\""
+             }
+ :layers    {:tab-mode              {:key     :tab
+                                     :afterup [{:set ["yabai-move-mode" 0]}
+                                               {:set ["yabai-scale-mode" 0]}
+                                               {:set ["spec-mode" 0]}]
+                                     :condi   [:!comma-mode :!period-mode]}
+             :yabai-move-mode       {:key :f :condi :tab-mode}
+             :yabai-scale-mode      {:key :c :condi :tab-mode}
+             :spec-mode             {:key :s :condi :tab-mode}
+             ;; :yabai-insert-mode     {:key :i :condi :tab-mode}
+             :period-mode           {:key :period :afterup {:set ["period-comma-mode" 0]} :condi [:!emacs-s-mode :!tmux-windmove-mode :!k2-mode]}
+             :comma-mode            {:key :comma :condi [:!emacs-s-mode :!tmux-windmove-mode]}
+             :tmux-windmove-mode    {:key :q :condi [:Terminals :!comma-mode :!period-mode]}
+             :tmux-windresize-mode  {:key :c :condi :tmux-windmove-mode}
+             :k2-mode               {:key :2 :condi [:!tab-mode :!tmux-windmove-mode]}}
+ :simlayers {:test-mode             {:key :9}
+             :contexts-f-mode       {:key :f}
+             :browser-s-mode        {:key :s :condi :Browsers}
+             :mouse_keys_mode_v4    {:key :a :afterup {:set ["mouse_keys_mode_v4_scroll" 0]}}
+             :vi-mode               {:key :d}
+             :vi-visual-mode        {:key :v :condi :!vim-mode-disabled-application}
+             :launch-mode           {:key :w}
+             ;; :q-mode {:key :q :condi [:!comma-mode :!period-mode]}
+             :alfred-mode           {:key :z}
+             :finder-alfred-mode    {:key :z :condi :Finder}
+             :browsers-alfred-mode  {:key :z :condi :Browsers}}
+ :main      [
+             {:des   "Vi Mode [D as Trigger Key]"
+              :rules [:vi-mode
+                      [:##j :down_arrow]
+                      [:##k :up_arrow]
+                      [:##h :left_arrow]
+                      [:##l :right_arrow]
+                      [:##b :!Oleft_arrow]
+                      [:##w :!Oright_arrow]
+                      [:##0 :!Ta]
+                      [:##4 :!Te]]}
+             {:des   "Vi Visual Mode"
+              :rules [:vi-visual-mode
+                      [:##j :!Sdown_arrow]
+                      [:##k :!Sup_arrow]
+                      [:##h :!Sleft_arrow]
+                      [:##l :!Sright_arrow]
+                      [:##b :!SOleft_arrow]
+                      [:##e :!SOright_arrow]
+                      [:##0 :!SCleft_arrow]
+                      [:##4 :!SCright_arrow]
+                      [:##open_bracket :!SOup_arrow]
+                      [:##close_bracket :!SOdown_arrow]]}
+             {:des   "launcher mode"
+              :rules [:launch-mode
+                      [:j [:open "/Applications/Alacritty.app"]]
+                      [:p [:open "/Applications/Figma.app"]]
+                      [:l [:open "/Applications/Firefox.app"]]
+                      [:n [:open "/Applications/Notion.app"]]
+                      [:f [:open "/System/Library/CoreServices/Finder.app"]]
+                      [:h [:open "/Applications/Slack.app"]]
+                      [:e [:w :e]]
+                      [:hyphen [{:key :m :modi :ro}
+                                {:key :a :modi :ro}
+                                {:key :i :modi :ro}
+                                {:key :n :modi :ro}
+                                {:key :r :modi :ro}
+                                {:key :e :modi :ro}
+                                {:key :b :modi :ro}
+                                {:key :l :modi :ro}]]
+                      [:d [{:key :c :modi :ro}
+                           {:key :h :modi :ro}
+                           {:key :r :modi :ro}
+                           {:key :o :modi :ro}
+                           {:key :m :modi :ro}
+                           {:key :i :modi :ro}
+                           {:key :u :modi :ro}
+                           {:key :m :modi :ro}
+                           {:key :n :modi :ro}
+                           {:key :d :modi :ro}
+                           {:key :b :modi :ro}
+                           :return_or_enter]]]}
+]
+ :devices            {:macbook-internal [{:product_id 631 :vendor_id 1452}]
+                      :uhk-keyboard     [{:product_id 24866 :vendor_id 7504}]
+                      :filco-minila     [{:product_id 34050 :vendor_id 2652}]
+                      :hhkb-tmk         [{:vendor_id 65261 :product_id 51966}]
+                      :hhkb-bt          [{:vendor_id 1278 :product_id 514}]
+                      :hhkb             [{:vendor_id 2131 :product_id 256}]
+                      :kensington-tb    [{:vendor_id 1149 :product_id 32792}]}
+ 
+ :simlayer-threshold 210}
