@@ -1,3 +1,30 @@
+background_opacity: .9
+window:
+  dynamic_title: true
+  dimensions:
+    columns: 0
+    lines: 0
+
+  position:
+    x: 0
+    y: 0
+
+  startup_mode: Fullscreen
+  position:
+    x: 0
+    y: 0
+
+  padding:
+    x: 15
+    y: 15 
+
+  dynamic_padding: false
+  # decorations: none
+
+scrolling:
+  history: 50000
+  multiplier: 3
+
 font:
   size: 12
   normal:
@@ -60,4 +87,16 @@ colors:
     magenta: '#8f3f71'
     cyan:    '#427b58'
     white:   '#928374'
-  # indexed_colors: []
+
+key_bindings:
+    - { key: J,        mods: Alt,           chars: "\x1bj"                       }
+    - { key: K,        mods: Alt,           chars: "\x1bk"                       }
+    - { key: H,        mods: Alt,           chars: "\x1bh"                       }
+    - { key: L,        mods: Alt,           chars: "\x1bl"                       }
+    - { key: T,        mods: Alt,           chars: "\x1bt"                       }
+    - { key: W,        mods: Alt|Shift,     chars: "\x1bW"                       }
+    - { key: P,        mods: Alt,           chars: "\x1bp"                       }
+    - { key: N,        mods: Alt,           chars: "\x1bn"                       }
+    - { key: D,        mods: Alt,           chars: "\x1bd"                       }
+    - { key: E,        mods: Alt,           chars: "\x1be"                       }
+    - { key: X,        mods: Alt|Shift,     chars: "\x1bX"                       }
