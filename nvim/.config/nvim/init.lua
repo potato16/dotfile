@@ -21,32 +21,34 @@ require('packer').startup(function()
   use 'wbthomason/packer.nvim'       -- Package manager
   use 'tpope/vim-fugitive'           -- Git commands in nvim
   use 'tpope/vim-commentary'         -- "gc" to comment visual regions/lines
-  use 'ludovicchabant/vim-gutentags' -- Automatic tags management
+  -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
   -- UI to select things (files, grep results, open buffers...)
   -- use 'nvim-lua/popup.nvim'
   -- use 'nvim-lua/plenary.nvim'
   use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} }
-  -- use {'~/dev/projects/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} }
+  use {'junegunn/fzf'}--, run =  "fzf#install()" }
+  use 'junegunn/fzf.vim'
   use 'morhetz/gruvbox' -- gruvbox theme
+  use 'srcery-colors/srcery-vim' -- srcery theme
   -- Add indentation guides even on blank lines
   use 'lukas-reineke/indent-blankline.nvim'
   use 'neovim/nvim-lspconfig'        -- Collection of configurations for built-in LSP client
   use 'hrsh7th/nvim-compe'           -- Autocompletion plugin
   use 'dart-lang/dart-vim-plugin'    -- filetype detection, syntax highlighting, and indentation for Dart code in Vim.
-  use 'akinsho/flutter-tools.nvim'   -- flutter-tools
+  -- use 'akinsho/flutter-tools.nvim'   -- flutter-tools
   use 'mfussenegger/nvim-dap' -- debug tool
   use 'SirVer/ultisnips' 	     -- for snippets
   use 'f-person/pubspec-assist-nvim' -- assist insert pubspec
   use 'f-person/nvim-sort-dart-imports' -- sort imports for dart
   use 'nvim-treesitter/nvim-treesitter'
+  use 'nvim-treesitter/playground' -- playground with treesitter
   use 'tamago324/compe-zsh' --zsh source for compe
   use 'kevinhwang91/nvim-bqf' -- quickfix better
-  use 'akinsho/nvim-bufferline.lua' --tabline
   use 'gennaro-tedesco/nvim-jqx' -- view json
   use {'kevinhwang91/nvim-hlslens'} -- search highlight
   use {"npxbr/glow.nvim", run = "GlowInstall"} -- preview markdown
-  use 'kdheepak/lazygit.nvim' -- call lazygit in vim
-  use 'ray-x/lsp_signature.nvim' -- signature pop up help
+  -- use 'kdheepak/lazygit.nvim' -- call lazygit in vim
+  -- use 'ray-x/lsp_signature.nvim' -- signature pop up help
   use {
   'kyazdani42/nvim-tree.lua', -- file manager
   requires = "kyazdani42/nvim-web-devicons",
@@ -75,6 +77,7 @@ vim.o.incsearch = true
 
 --Make line numbers default
 vim.wo.number = true
+vim.wo.relativenumber = true
 
 --Do not save when switching buffers
 vim.o.hidden = true
@@ -105,8 +108,8 @@ vim.wo.signcolumn="yes"
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
-vim.cmd[[colorscheme gruvbox]]
-
+-- vim.cmd[[colorscheme gruvbox]]
+vim.cmd[[colorscheme srcery]]
 
 --Remap tab on ultisnips so we can use tab for complete
 vim.g.UltiSnipsExpandTrigger="C-<tab>"
@@ -216,7 +219,7 @@ vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true})
 local nvim_lsp = require('lspconfig')
 local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  require "lsp_signature".on_attach()
+  -- require "lsp_signature".on_attach()
 
   local opts = { noremap=true, silent=true }
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -238,10 +241,10 @@ local on_attach = function(_client, bufnr)
 end
 
 -- Enable the following language servers
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'gopls', 'bashls' }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach }
-end
+-- local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', '', 'bashls' }
+-- for _, lsp in ipairs(servers) do
+--   nvim_lsp[lsp].setup { on_attach = on_attach }
+-- end
 
 local sumneko_root_path = vim.fn.getenv("HOME").."/dev/projects/lua-language-server" -- Change to your sumneko root installation
 local sumneko_binary_path = "/bin/macOS/lua-language-server" -- Change to your OS specific output folder
@@ -269,56 +272,101 @@ nvim_lsp.sumneko_lua.setup {
 
 
 -- Setup flutter
-require("flutter-tools").setup{
-  ui = {
-    -- the border type to use for all floating windows, the same options/formats
-    -- used for ":h nvim_open_win" e.g. "single" | "shadow" | {<table-of-eight-chars>}
-    border = "rounded",
-  },
+-- require("flutter-tools").setup{
+--   ui = {
+--     -- the border type to use for all floating windows, the same options/formats
+--     -- used for ":h nvim_open_win" e.g. "single" | "shadow" | {<table-of-eight-chars>}
+--     border = "rounded",
+--   },
 
-  debugger = { -- integrate with nvim dap
-    enabled = true,
-  },
-  flutter_path = vim.fn.getenv("FLUTTER").."/flutter",
-  -- flutter_lookup_cmd =vim.fn.getenv("FLUTTER").."/flutter", -- example "dirname $(which flutter)" or "asdf where flutter"
-  widget_guides = {
-    enabled = false,
-  },
-  closing_tags = {
-    -- highlight = "ErrorMsg", -- highlight for the closing tag
-    -- prefix = ">", -- character to use for close tag e.g. > Widget
-    enabled = true -- set to false to disable
-  },
-  dev_log = {
-    open_cmd = "tabedit", -- command to use to open the log buffer
-  },
-  outline = {
-    open_cmd = "30vnew", -- command to use to open the outline buffer
-  },
-  lsp = {
-    on_attach = on_attach,
-    settings = {
-      showTodos = true,
-      completeFunctionCalls = true,
-    }
-  }
+--   debugger = { -- integrate with nvim dap
+--     enabled = true,
+--   },
+--   flutter_path = vim.fn.getenv("FLUTTER").."/flutter",
+--   -- flutter_lookup_cmd =vim.fn.getenv("FLUTTER").."/flutter", -- example "dirname $(which flutter)" or "asdf where flutter"
+--   widget_guides = {
+--     enabled = false,
+--   },
+--   closing_tags = {
+--     -- highlight = "ErrorMsg", -- highlight for the closing tag
+--     -- prefix = ">", -- character to use for close tag e.g. > Widget
+--     enabled = true -- set to false to disable
+--   },
+--   dev_log = {
+--     open_cmd = "tabedit", -- command to use to open the log buffer
+--   },
+--   outline = {
+--     open_cmd = "30vnew", -- command to use to open the outline buffer
+--   },
+--   lsp = {
+--     on_attach = on_attach,
+--     settings = {
+--       showTodos = true,
+--       completeFunctionCalls = true,
+--     }
+--   }
+-- }
+
+nvim_lsp.dartls.setup{
+  cmd = { "dart", vim.fn.getenv("FLUTTER").."/cache/dart-sdk/bin/snapshots/analysis_server.dart.snapshot", "--lsp" };
+  on_attach = on_attach;
+  settings = {
+    closingLabels  = true,
+    flutterOutline = true,
+  };
+  init_options = {
+	closingLabels = true,
+	flutterOutline = true,
+	onlyAnalyzeProjectsWithOpenFiles = false,
+	outline = true,
+	suggestFromUnimportedLibraries = true
+  };
 }
 
--- nvim_lsp.dartls.setup{
---   cmd = { "dart", vim.fn.getenv("FLUTTER").."/cache/dart-sdk/bin/snapshots/analysis_server.dart.snapshot", "--lsp" };
---   on_attach = on_attach;
---   settings = {
---     closingLabels  = true,
---     flutterOutline = true,
---   };
---   init_options = {
--- 	closingLabels = true,
--- 	flutterOutline = true,
--- 	onlyAnalyzeProjectsWithOpenFiles = false,
--- 	outline = true,
--- 	suggestFromUnimportedLibraries = true
---   };
--- }
+-- setup gopls
+nvim_lsp.gopls.setup{
+  on_attach = on_attach;
+  cmd = {"gopls", "serve"},
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+}
+function goimports(timeout_ms)
+    local context = { only = { "source.organizeImports" } }
+    vim.validate { context = { context, "t", true } }
+
+    local params = vim.lsp.util.make_range_params()
+    params.context = context
+
+    -- See the implementation of the textDocument/codeAction callback
+    -- (lua/vim/lsp/handler.lua) for how to do this properly.
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+    if not result or next(result) == nil then return end
+    local actions = result[1].result
+    if not actions then return end
+    local action = actions[1]
+
+    -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+    -- is a CodeAction, it can have either an edit, a command or both. Edits
+    -- should be executed first.
+    if action.edit or type(action.command) == "table" then
+      if action.edit then
+        vim.lsp.util.apply_workspace_edit(action.edit)
+      end
+      if type(action.command) == "table" then
+        vim.lsp.buf.execute_command(action.command)
+      end
+    else
+      vim.lsp.buf.execute_command(action)
+    end
+end
+
+
 
 
 -- Map :Format to vim.lsp.buf.formatting()
@@ -344,16 +392,10 @@ require'compe'.setup {
 
   source = {
     path = true;
-	tags = true;
+	-- tags = true;
 	zsh = true;
     nvim_lsp = true;
     buffer = true;
-    calc = true;
-    nvim_lua = true;
-    vsnip = true;
-	spell = true;
-    ultisnips = true;
-    luasnip = true;
   };
 }
 
@@ -406,6 +448,7 @@ vim.api.nvim_exec([[
     autocmd!
 	autocmd BufWrite *.dart :DartSortImports
     autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
+	autocmd BufWritePre *.go lua goimports(1000)
   augroup end
 ]], false)
 ---------------NVIM TREE---------------------------------
@@ -429,7 +472,7 @@ vim.g.nvim_tree_auto_resize = 0 --1 by default, will resize the tree to its save
 vim.g.nvim_tree_disable_netrw = 0 --1 by default, disables netrw
 vim.g.nvim_tree_hijack_netrw = 0 --1 by default, prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
 vim.g.nvim_tree_add_trailing = 1 --0 by default, append a trailing slash to folder names
-vim.g.nvim_tree_group_empty = 1 -- 0 by default, compact folders that only contain a single folder into one node in the file tree
+vim.g.nvim_tree_group_empty = 0 -- 0 by default, compact folders that only contain a single folder into one node in the file tree
 vim.g.nvim_tree_lsp_diagnostics = 1 --0 by default, will show lsp diagnostics in the signcolumn. See :help nvim_tree_lsp_diagnostics
 vim.g.nvim_tree_disable_window_picker = 1 --0 by default, will disable the window picker.
 vim.g.nvim_tree_hijack_cursor = 0 --1 by default, when moving cursor in the tree, will position the cursor at the start of the file on the current line
@@ -449,35 +492,4 @@ require("trouble").next({skip_groups = true, jump = true});
 
 -- jump to the previous item, skipping the groups
 require("trouble").previous({skip_groups = true, jump = true});
---------------------bufferline config---------------------------
-require("bufferline").setup{
-	diagnostics = "nvim_lsp",
-	custom_areas = {
-	  right = function()
-		local result = {}
-		local error = vim.lsp.diagnostic.get_count(0, [[Error]])
-		local warning = vim.lsp.diagnostic.get_count(0, [[Warning]])
-		local info = vim.lsp.diagnostic.get_count(0, [[Information]])
-		local hint = vim.lsp.diagnostic.get_count(0, [[Hint]])
-
-		table.insert(result, {text = "  " .. error, guifg = "#EC5241"})
-		if error ~= 0 then
-		  table.insert(result, {text = "  " .. error, guifg = "#EC5241"})
-		end
-
-		if warning ~= 0 then
-		  table.insert(result, {text = "  " .. warning, guifg = "#EFB839"})
-		end
-
-		if hint ~= 0 then
-		  table.insert(result, {text = "  " .. hint, guifg = "#A3BA5E"})
-		end
-
-		if info ~= 0 then
-		  table.insert(result, {text = "  " .. info, guifg = "#7EA9A7"})
-		end
-		return result
-	  end,
-	}
-}
 end

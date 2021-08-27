@@ -46,7 +46,7 @@
              :mouse_keys_mode_v4    {:key :a :afterup {:set ["mouse_keys_mode_v4_scroll" 0]}}
              :vi-mode               {:key :d}
              :vi-visual-mode        {:key :v :condi :!vim-mode-disabled-application}
-             :launch-mode           {:key :w}
+             :launch-mode           {:key :o}
              ;; :q-mode {:key :q :condi [:!comma-mode :!period-mode]}
              :alfred-mode           {:key :z}
              :finder-alfred-mode    {:key :z :condi :Finder}
@@ -76,12 +76,11 @@
                       [:##close_bracket :!SOdown_arrow]]}
              {:des   "launcher mode"
               :rules [:launch-mode
-                      [:j [:open "/Applications/Alacritty.app"]]
-                      [:p [:open "/Applications/Figma.app"]]
-                      [:l [:open "/Applications/Firefox.app"]]
+                      [:a [:open "/Applications/Alacritty.app"]]
+                      [:f [:open "/Applications/Firefox.app"]]
+                      [:v [:open "/Applications/Vieb.app"]]
                       [:n [:open "/Applications/Notion.app"]]
-                      [:f [:open "/System/Library/CoreServices/Finder.app"]]
-                      [:h [:open "/Applications/Slack.app"]]
+                      [:s [:open "/Applications/Slack.app"]]
                       [:e [:w :e]]
                       [:hyphen [{:key :m :modi :ro}
                                 {:key :a :modi :ro}

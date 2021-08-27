@@ -49,7 +49,7 @@ alias sudo='sudo '
 alias week='date +%V'
 
 # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update='sudo softwareupdate -i -a; arch -arm64 brew update;arch -arm64 brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
+alias update='sudo softwareupdate -i -a;brew update;brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
 
 # Google Chrome
 alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
@@ -149,3 +149,11 @@ alias path='echo -e ${PATH//:/\\n}'
 
 #show external ip address
 alias ipinfo="curl ipinfo.io"
+# flutter aliases
+alias fpg="flutter pub get"
+alias frd="flutter run --no-sound-null-safety -t lib/config/main_dev.dart --flavor dev"
+alias frp="flutter run --no-sound-null-safety -t lib/config/main_prod.dart --flavor prod"
+alias fpb="flutter pub run build_runner build --delete-conflicting-outputs"
+alias fle="flutter emulator --launch a"
+alias ftcn="flutter test --coverage --no-sound-null-safety"
+alias ftc="flutter test --coverage"

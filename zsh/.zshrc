@@ -4,6 +4,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/thaohan/.oh-my-zsh"
 export ANDROID_HOME="/Users/thaohan/Library/Android/sdk"
+export ANDROID_SDK_ROOT="/Users/thaohan/Library/Android/sdk"
 export FLUTTER="/Users/thaohan/dev/projects/flutter/bin"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
@@ -12,6 +13,10 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/
 export EDITOR=nvim
 export GOLANG_BIN="/Users/thaohan/go/bin"
 export GOPATH="/Users/thaohan/go"
+export CARGO_BIN="/Users/thaohan/.cargo/bin"
+export GEM_HOME=$HOME/.gem
+export RUBY_BIN="/opt/homebrew/opt/ruby/bin"
+export RBENV_ROOT="/usr/local/var/rbenv"
 
 
 if ! [[ $PATH == *"$FLUTTER"* ]]; then
@@ -26,12 +31,29 @@ fi
 if ! [[ $PATH == *"$ANDROID_HOME"* ]]; then
   export PATH="$PATH:$ANDROID_HOME"
 fi
+if ! [[ $PATH == *"$CARGO_BIN"* ]]; then
+  export PATH="$PATH:$CARGO_BIN"
+fi
+if ! [[ $PATH == *"$GEM_HOME"* ]]; then
+  export PATH=$GEM_HOME/bin:$PATH
+fi
+# if ! [[ $PATH == *"$RUBY_BIN"* ]]; then
+#   export PATH=$RUBY_BIN:$PATH
+# fi
+# if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+
+
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="robbyrussell"
+
+# FZF 
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_DEFAULT_OPTS='--bind ctrl-n:down,ctrl-p:up'
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -130,3 +152,4 @@ alias lg="lazygit"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias luamake=/Users/thaohan/dev/gitprojects/lua-language-server/3rd/luamake/luamake
+alias python="python3"
