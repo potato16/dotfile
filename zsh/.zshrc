@@ -7,7 +7,12 @@ export ANDROID_HOME="/Users/thaohan/Library/Android/sdk"
 export ANDROID_SDK_ROOT="/Users/thaohan/Library/Android/sdk"
 export FLUTTER="/Users/thaohan/dev/projects/flutter/bin"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
+
+export OPENSSL_HOME="/opt/homebrew/opt/openssl@1.1"
+export LDFLAGS="-L/opt/homebrew/opt/openssl@1.1/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/openssl@1.1/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl@1.1/lib/pkgconfig"
+
 # export JAVA_HOME="/opt/homebrew/opt/openjdk"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
 export EDITOR=nvim
@@ -36,6 +41,9 @@ if ! [[ $PATH == *"$CARGO_BIN"* ]]; then
 fi
 if ! [[ $PATH == *"$GEM_HOME"* ]]; then
   export PATH=$GEM_HOME/bin:$PATH
+fi
+if ! [[ $PATH == *"$OPENSSL_HOME/bin"* ]]; then
+  export PATH=$OPENSSL_HOME/bin:$PATH
 fi
 # if ! [[ $PATH == *"$RUBY_BIN"* ]]; then
 #   export PATH=$RUBY_BIN:$PATH

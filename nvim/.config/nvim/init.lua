@@ -33,7 +33,8 @@ require('packer').startup(function()
   -- Add indentation guides even on blank lines
   use 'lukas-reineke/indent-blankline.nvim'
   use 'neovim/nvim-lspconfig'        -- Collection of configurations for built-in LSP client
-  use 'hrsh7th/nvim-compe'           -- Autocompletion plugin
+  use 'onsails/lspkind-nvim'        -- Collection of configurations for built-in LSP client
+  -- use 'hrsh7th/nvim-compe'           -- Autocompletion plugin
   use 'dart-lang/dart-vim-plugin'    -- filetype detection, syntax highlighting, and indentation for Dart code in Vim.
   -- use 'akinsho/flutter-tools.nvim'   -- flutter-tools
   use 'mfussenegger/nvim-dap' -- debug tool
@@ -46,7 +47,23 @@ require('packer').startup(function()
   use 'kevinhwang91/nvim-bqf' -- quickfix better
   use 'gennaro-tedesco/nvim-jqx' -- view json
   use {'kevinhwang91/nvim-hlslens'} -- search highlight
+  use {'windwp/nvim-autopairs'} -- autopair
   use {"npxbr/glow.nvim", run = "GlowInstall"} -- preview markdown
+  -- Install nvim-cmp, and buffer source as a dependency
+  use {
+	"hrsh7th/nvim-cmp",
+	requires = {
+		"hrsh7th/cmp-buffer", "hrsh7th/cmp-nvim-lsp",
+		'quangnguyen30192/cmp-nvim-ultisnips', 'hrsh7th/cmp-nvim-lua',
+		'octaltree/cmp-look', 'hrsh7th/cmp-path', 'hrsh7th/cmp-calc',
+		'f3fora/cmp-spell', 'hrsh7th/cmp-emoji'
+	}
+  }
+  use {
+	'tzachar/cmp-tabnine',
+	run = './install.sh',
+	requires = 'hrsh7th/nvim-cmp'
+  }
   -- use 'kdheepak/lazygit.nvim' -- call lazygit in vim
   -- use 'ray-x/lsp_signature.nvim' -- signature pop up help
   use {
@@ -322,6 +339,8 @@ nvim_lsp.dartls.setup{
 	suggestFromUnimportedLibraries = true
   };
 }
+-- setup pyright
+nvim_lsp.pyright.setup{}
 
 -- setup gopls
 nvim_lsp.gopls.setup{
@@ -375,29 +394,28 @@ vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
 -- Set completeopt to have a better completion experience
 vim.o.completeopt="menuone,noinsert"
 
--- Compe setup
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = true;
+-- require'compe'.setup {
+--   enabled = true;
+--   autocomplete = true;
+--   debug = false;
+--   min_length = 1;
+--   preselect = 'enable';
+--   throttle_time = 80;
+--   source_timeout = 200;
+--   incomplete_delay = 400;
+--   max_abbr_width = 100;
+--   max_kind_width = 100;
+--   max_menu_width = 100;
+--   documentation = true;
 
-  source = {
-    path = true;
-	-- tags = true;
-	zsh = true;
-    nvim_lsp = true;
-    buffer = true;
-  };
-}
+--   source = {
+--     path = true;
+-- 	-- tags = true;
+-- 	zsh = true;
+--     nvim_lsp = true;
+--     buffer = true;
+--   };
+-- }
 
 local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -492,4 +510,7 @@ require("trouble").next({skip_groups = true, jump = true});
 
 -- jump to the previous item, skipping the groups
 require("trouble").previous({skip_groups = true, jump = true});
+-- setup cmp
+require('nvim-autopairs').setup{}
+require("cmp_conf")
 end
