@@ -49,6 +49,10 @@ require('packer').startup(function()
   use {'kevinhwang91/nvim-hlslens'} -- search highlight
   use {'windwp/nvim-autopairs'} -- autopair
   use {"npxbr/glow.nvim", run = "GlowInstall"} -- preview markdown
+  use {
+  'shadmansaleh/lualine.nvim',
+  requires = {'kyazdani42/nvim-web-devicons', opt = true}
+  }
   -- Install nvim-cmp, and buffer source as a dependency
   use {
 	"hrsh7th/nvim-cmp",
@@ -254,7 +258,7 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist({workspace = true})<CR>', opts)
 end
 
 -- Enable the following language servers
@@ -513,4 +517,5 @@ require("trouble").previous({skip_groups = true, jump = true});
 -- setup cmp
 require('nvim-autopairs').setup{}
 require("cmp_conf")
+require("lualine_conf")
 end
