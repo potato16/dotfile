@@ -5,6 +5,7 @@
 export ZSH="/Users/thaohan/.oh-my-zsh"
 export ANDROID_HOME="/Users/thaohan/Library/Android/sdk"
 export ANDROID_SDK_ROOT="/Users/thaohan/Library/Android/sdk"
+export FLUTTER_ROOT="/Users/thaohan/dev/projects/flutter"
 export FLUTTER="/Users/thaohan/dev/projects/flutter/bin"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 

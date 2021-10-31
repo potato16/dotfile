@@ -19,6 +19,7 @@ vim.api.nvim_exec([[
 local use = require('packer').use
 require('packer').startup(function()
   use 'wbthomason/packer.nvim'       -- Package manager
+  use 'github/copilot.vim'       -- copilot
   use 'tpope/vim-fugitive'           -- Git commands in nvim
   use 'tpope/vim-commentary'         -- "gc" to comment visual regions/lines
   -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
@@ -50,7 +51,7 @@ require('packer').startup(function()
   use {'windwp/nvim-autopairs'} -- autopair
   use {"npxbr/glow.nvim", run = "GlowInstall"} -- preview markdown
   use {
-  'shadmansaleh/lualine.nvim',
+  'nvim-lualine/lualine.nvim',
   requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
   -- Install nvim-cmp, and buffer source as a dependency
@@ -63,29 +64,29 @@ require('packer').startup(function()
 		'f3fora/cmp-spell', 'hrsh7th/cmp-emoji'
 	}
   }
-  use {
-	'tzachar/cmp-tabnine',
-	run = './install.sh',
-	requires = 'hrsh7th/nvim-cmp'
-  }
+  -- use {
+	-- 'tzachar/cmp-tabnine',
+	-- run = './install.sh',
+	-- requires = 'hrsh7th/nvim-cmp'
+  -- }
   -- use 'kdheepak/lazygit.nvim' -- call lazygit in vim
   -- use 'ray-x/lsp_signature.nvim' -- signature pop up help
   use {
   'kyazdani42/nvim-tree.lua', -- file manager
   requires = "kyazdani42/nvim-web-devicons",
   }
-  use {
-  "folke/trouble.nvim",
-  requires = "kyazdani42/nvim-web-devicons",
-  config = function()
-    require("trouble").setup {
-		auto_open = false, -- automatically open the list when you have diagnostics
-		auto_close = true, -- automatically close the list when you have no diagnostics
-		auto_preview = true, -- automatyically preview the location of the diagnostic. <esc> to close preview and go back to last window
-		auto_fold = false,
-    }
-  end
-  }
+  -- use {
+  -- "folke/trouble.nvim",
+  -- requires = "kyazdani42/nvim-web-devicons",
+  -- config = function()
+  --   require("trouble").setup {
+		-- auto_open = false, -- automatically open the list when you have diagnostics
+		-- auto_close = true, -- automatically close the list when you have no diagnostics
+		-- auto_preview = true, -- automatyically preview the location of the diagnostic. <esc> to close preview and go back to last window
+		-- auto_fold = false,
+  --   }
+  -- end
+  -- }
 end)
 
 
@@ -175,23 +176,25 @@ end
 vim.api.nvim_set_keymap('n', '<F10>', '<cmd>lua ToggleMouse()<cr>', { noremap = true })
 
 -- Telescope
-local trouble = require("trouble.providers.telescope")
-require('telescope').setup {
-  defaults = {
-    mappings = {
-      i = {
-        ["<C-u>"] = false,
-        ["<C-d>"] = false,
-      },
-	  n = { ["<c-t>"] = trouble.open_with_trouble },
-    },
-    -- generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
-    -- file_sorter =  require'telescope.sorters'.get_fzy_sorter,
-  }
-}
+-- local trouble = require("trouble.providers.telescope")
+-- require('telescope').setup {
+--   defaults = {
+--     mappings = {
+--       i = {
+--         ["<C-u>"] = false,
+--         ["<C-d>"] = false,
+--       },
+-- 	  n = { ["<c-t>"] = trouble.open_with_trouble },
+--     },
+--     -- generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
+--     -- file_sorter =  require'telescope.sorters'.get_fzy_sorter,
+--   }
+-- }
 --Add leader shortcuts
-vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>lua require('telescope.builtin').find_files()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>lua require('telescope.builtin').find_files()<cr>]], { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>FZF<cr>]], { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>Buffers<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>l', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>t', [[<cmd>lua require('telescope.builtin').tags()<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]], { noremap = true, silent = true})
@@ -203,24 +206,24 @@ vim.api.nvim_set_keymap('n', '<leader>gb', [[<cmd>lua require('telescope.builtin
 vim.api.nvim_set_keymap('n', '<leader>gs', [[<cmd>lua require('telescope.builtin').git_status()<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>gp', [[<cmd>lua require('telescope.builtin').git_bcommits()<cr>]], { noremap = true, silent = true})
 -- Trouble
-vim.api.nvim_set_keymap("n", "<leader>xx", "<cmd>Trouble<cr>",
-  {silent = true, noremap = true}
-)
-vim.api.nvim_set_keymap("n", "<leader>xw", "<cmd>Trouble lsp_workspace_diagnostics<cr>",
-  {silent = true, noremap = true}
-)
-vim.api.nvim_set_keymap("n", "<leader>xd", "<cmd>Trouble lsp_document_diagnostics<cr>",
-  {silent = true, noremap = true}
-)
-vim.api.nvim_set_keymap("n", "<leader>xl", "<cmd>Trouble loclist<cr>",
-  {silent = true, noremap = true}
-)
-vim.api.nvim_set_keymap("n", "<leader>xq", "<cmd>Trouble quickfix<cr>",
-  {silent = true, noremap = true}
-)
-vim.api.nvim_set_keymap("n", "gR", "<cmd>Trouble lsp_references<cr>",
-  {silent = true, noremap = true}
-)
+-- vim.api.nvim_set_keymap("n", "<leader>xx", "<cmd>Trouble<cr>",
+--   {silent = true, noremap = true}
+-- )
+-- vim.api.nvim_set_keymap("n", "<leader>xw", "<cmd>Trouble lsp_workspace_diagnostics<cr>",
+--   {silent = true, noremap = true}
+-- )
+-- vim.api.nvim_set_keymap("n", "<leader>xd", "<cmd>Trouble lsp_document_diagnostics<cr>",
+--   {silent = true, noremap = true}
+-- )
+-- vim.api.nvim_set_keymap("n", "<leader>xl", "<cmd>Trouble loclist<cr>",
+--   {silent = true, noremap = true}
+-- )
+-- vim.api.nvim_set_keymap("n", "<leader>xq", "<cmd>Trouble quickfix<cr>",
+--   {silent = true, noremap = true}
+-- )
+-- vim.api.nvim_set_keymap("n", "gR", "<cmd>Trouble lsp_references<cr>",
+--   {silent = true, noremap = true}
+-- )
 
 -- Change preview window location
 vim.g.splitbelow = true
@@ -259,6 +262,7 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist({workspace = true})<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<esc><esc>', '<cmd>noh<CR>', opts)
 end
 
 -- Enable the following language servers
@@ -291,6 +295,8 @@ nvim_lsp.sumneko_lua.setup {
   },
 }
 
+-- swift
+nvim_lsp.sourcekit.setup{}
 
 -- Setup flutter
 -- require("flutter-tools").setup{
@@ -330,6 +336,7 @@ nvim_lsp.sumneko_lua.setup {
 
 nvim_lsp.dartls.setup{
   cmd = { "dart", vim.fn.getenv("FLUTTER").."/cache/dart-sdk/bin/snapshots/analysis_server.dart.snapshot", "--lsp" };
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities());
   on_attach = on_attach;
   settings = {
     closingLabels  = true,
@@ -345,6 +352,7 @@ nvim_lsp.dartls.setup{
 }
 -- setup pyright
 nvim_lsp.pyright.setup{}
+nvim_lsp.bashls.setup{}
 
 -- setup gopls
 nvim_lsp.gopls.setup{
@@ -396,73 +404,7 @@ end
 vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt="menuone,noinsert"
-
--- require'compe'.setup {
---   enabled = true;
---   autocomplete = true;
---   debug = false;
---   min_length = 1;
---   preselect = 'enable';
---   throttle_time = 80;
---   source_timeout = 200;
---   incomplete_delay = 400;
---   max_abbr_width = 100;
---   max_kind_width = 100;
---   max_menu_width = 100;
---   documentation = true;
-
---   source = {
---     path = true;
--- 	-- tags = true;
--- 	zsh = true;
---     nvim_lsp = true;
---     buffer = true;
---   };
--- }
-
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-n>"
-  elseif check_back_space() then
-    return t "<Tab>"
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-_G.s_tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-p>"
-  else
-    return t "<S-Tab>"
-  end
-end
-
-vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-vim.api.nvim_set_keymap("i", "<C-Space>", "compe#complete()", {expr=true, silent=true})
--- vim.api.nvim_set_keymap("i", "<CR>", "compe#confirm('<CR>')", {expr=true, silent=true})
-vim.api.nvim_set_keymap("i", "<CR>", "compe#confirm({ 'keys': '<CR>', 'select': v:true })", { expr = true })
--- Double esc to clear search highlight
-vim.api.nvim_set_keymap("n", "<esc><esc>", ":noh<CR>", {silent=true})
+vim.o.completeopt="menu,menuone,noselect"
 
 -- format after save
 vim.api.nvim_exec([[
@@ -474,32 +416,84 @@ vim.api.nvim_exec([[
   augroup end
 ]], false)
 ---------------NVIM TREE---------------------------------
+require'nvim-tree'.setup {
+  -- disables netrw completely
+  disable_netrw       = true,
+  -- hijack netrw window on startup
+  hijack_netrw        = true,
+  -- open the tree when running this setup function
+  open_on_setup       = false,
+  -- will not open on setup if the filetype is in this list
+  ignore_ft_on_setup  = {},
+  -- closes neovim automatically when the tree is the last **WINDOW** in the view
+  auto_close          = false,
+  -- opens the tree when changing/opening a new tab if the tree wasn't previously opened
+  open_on_tab         = false,
+  -- hijack the cursor in the tree to put it at the start of the filename
+  hijack_cursor       = false,
+  -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually) 
+  update_cwd          = false,
+  -- update the focused file on `BufEnter`, un-collapses the folders recursively until it finds the file
+  update_focused_file = {
+    -- enables the feature
+    enable      = true,
+    -- update the root directory of the tree to the one of the folder containing the file if the file is not under the current root directory
+    -- only relevant when `update_focused_file.enable` is true
+    update_cwd  = true,
+    -- list of buffer names / filetypes that will not update the cwd if the file isn't found under the current root directory
+    -- only relevant when `update_focused_file.update_cwd` is true and `update_focused_file.enable` is true
+    ignore_list = {}
+  },
+  -- configuration options for the system open command (`s` in the tree by default)
+  system_open = {
+    -- the command to run this, leaving nil should work in most cases
+    cmd  = nil,
+    -- the command arguments as a list
+    args = {}
+  },
+   -- show lsp diagnostics in the signcolumn
+  diagnostics = {
+    enable = false,
+    icons = {
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
+    }
+  },
+
+  view = {
+    -- width of the window, can be either a number (columns) or a string in `%`
+    width = 30,
+    -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
+    side = 'left',
+    -- if true the tree will resize itself after opening a file
+    auto_resize = false,
+    mappings = {
+      -- custom only false will merge the list with the default mappings
+      -- if true, it will only use your list to set the mappings
+      custom_only = false,
+      -- list of mappings to set on the tree manually
+      list = {}
+    }
+  }
+}
 --Config nvim tree
 vim.g.nvim_tree_side = 'right' --left by default
 vim.g.nvim_tree_width = 40 --30 by default, can be width_in_columns or 'width_in_percent%'
 vim.g.nvim_tree_ignore = { '.git', 'node_modules', '.cache' } --empty by default
 vim.g.nvim_tree_gitignore = 1 --0 by default
-vim.g.nvim_tree_auto_open = 1 --0 by default, opens the tree when typing `vim $DIR` or `vim`
-vim.g.nvim_tree_auto_close = 1 --0 by default, closes the tree when it's the last window
 vim.g.nvim_tree_auto_ignore_ft = { 'startify', 'dashboard' } --empty by default, don't auto open tree on specific filetypes.
 vim.g.nvim_tree_quit_on_open = 0 --0 by default, closes the tree when you open a file
-vim.g.nvim_tree_follow = 1 --0 by default, this option allows the cursor to be updated when entering a buffer
 vim.g.nvim_tree_indent_markers = 1 --0 by default, this option shows indent markers when folders are open
 vim.g.nvim_tree_hide_dotfiles = 1 --0 by default, this option hides files and folders starting with a dot `.`
 vim.g.nvim_tree_git_hl = 1 --0 by default, will enable file highlight for git attributes (can be used without the icons).
 vim.g.nvim_tree_highlight_opened_files = 1 --0 by default, will enable folder and file icon highlight for opened files/directories.
 vim.g.nvim_tree_root_folder_modifier = ':~' --This is the default. See :help filename-modifiers for more options
-vim.g.nvim_tree_tab_open = 1 --0 by default, will open the tree when entering a new tab and the tree was previously open
-vim.g.nvim_tree_auto_resize = 0 --1 by default, will resize the tree to its saved width when opening a file
-vim.g.nvim_tree_disable_netrw = 0 --1 by default, disables netrw
-vim.g.nvim_tree_hijack_netrw = 0 --1 by default, prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
 vim.g.nvim_tree_add_trailing = 1 --0 by default, append a trailing slash to folder names
 vim.g.nvim_tree_group_empty = 0 -- 0 by default, compact folders that only contain a single folder into one node in the file tree
-vim.g.nvim_tree_lsp_diagnostics = 1 --0 by default, will show lsp diagnostics in the signcolumn. See :help nvim_tree_lsp_diagnostics
 vim.g.nvim_tree_disable_window_picker = 1 --0 by default, will disable the window picker.
-vim.g.nvim_tree_hijack_cursor = 0 --1 by default, when moving cursor in the tree, will position the cursor at the start of the file on the current line
 vim.g.nvim_tree_icon_padding = ' ' --one space by default, used for rendering the space between the icon and the filename. Use with caution, it could break rendering if you set an empty string depending on your font.
-vim.g.nvim_tree_update_cwd = 1 --"0 by default, will update the tree cwd when changing nvim's directory (DirChanged event). Behaves strangely with autochdir set.
 
 -- open nvim tree
 vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {})
@@ -510,10 +504,10 @@ vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {})
 
 ---------------------- Trouble config --------------------------
 -- jump to the next item, skipping the groups
-require("trouble").next({skip_groups = true, jump = true});
+-- require("trouble").next({skip_groups = true, jump = true});
 
 -- jump to the previous item, skipping the groups
-require("trouble").previous({skip_groups = true, jump = true});
+-- require("trouble").previous({skip_groups = true, jump = true});
 -- setup cmp
 require('nvim-autopairs').setup{}
 require("cmp_conf")

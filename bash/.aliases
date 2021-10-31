@@ -151,8 +151,8 @@ alias path='echo -e ${PATH//:/\\n}'
 alias ipinfo="curl ipinfo.io"
 # flutter aliases
 alias fpg="flutter pub get"
-alias frd="flutter run --no-sound-null-safety -t lib/config/main_dev.dart --flavor dev"
-alias frp="flutter run --no-sound-null-safety -t lib/config/main_prod.dart --flavor prod"
+alias frd="flutter run -t lib/config/main_dev.dart --flavor dev"
+alias frp="flutter run -t lib/config/main_prod.dart --flavor prod"
 alias fpb="flutter pub run build_runner build --delete-conflicting-outputs"
 alias fle="flutter emulator --launch a"
 alias ftcn="flutter test --coverage --no-sound-null-safety"
