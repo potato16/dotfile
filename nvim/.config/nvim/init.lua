@@ -297,6 +297,8 @@ nvim_lsp.sumneko_lua.setup {
 
 -- swift
 nvim_lsp.sourcekit.setup{}
+-- rust
+nvim_lsp.rust_analyzer.setup{}
 
 -- Setup flutter
 -- require("flutter-tools").setup{
@@ -481,12 +483,9 @@ require'nvim-tree'.setup {
 --Config nvim tree
 vim.g.nvim_tree_side = 'right' --left by default
 vim.g.nvim_tree_width = 40 --30 by default, can be width_in_columns or 'width_in_percent%'
-vim.g.nvim_tree_ignore = { '.git', 'node_modules', '.cache' } --empty by default
-vim.g.nvim_tree_gitignore = 1 --0 by default
 vim.g.nvim_tree_auto_ignore_ft = { 'startify', 'dashboard' } --empty by default, don't auto open tree on specific filetypes.
 vim.g.nvim_tree_quit_on_open = 0 --0 by default, closes the tree when you open a file
 vim.g.nvim_tree_indent_markers = 1 --0 by default, this option shows indent markers when folders are open
-vim.g.nvim_tree_hide_dotfiles = 1 --0 by default, this option hides files and folders starting with a dot `.`
 vim.g.nvim_tree_git_hl = 1 --0 by default, will enable file highlight for git attributes (can be used without the icons).
 vim.g.nvim_tree_highlight_opened_files = 1 --0 by default, will enable folder and file icon highlight for opened files/directories.
 vim.g.nvim_tree_root_folder_modifier = ':~' --This is the default. See :help filename-modifiers for more options
@@ -509,6 +508,9 @@ vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {})
 -- jump to the previous item, skipping the groups
 -- require("trouble").previous({skip_groups = true, jump = true});
 -- setup cmp
+vim.g.copilot_no_tab_map = true
+vim.g.copilot_assume_mapped = true
+vim.g.copilot_tab_fallback = ""
 require('nvim-autopairs').setup{}
 require("cmp_conf")
 require("lualine_conf")

@@ -42,10 +42,22 @@ cmp.setup {
             behavior = cmp.ConfirmBehavior.Insert,
             select = true
         }),
-		["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { "i", "s" }),
+		-- ["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { "i", "s" }),
 		["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { "i", "s" }),
-		["<space>"] = cmp.mapping.confirm({ select = false }),
-        -- ['<C-Space>'] = cmp.mapping.complete(),
+		-- ["<space>"] = cmp.mapping.confirm({ select = false }),
+		["<Tab>"] = function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            else
+                local copilot_keys = vim.fn["copilot#Accept"]()
+                if copilot_keys ~= "" then
+                    vim.api.nvim_feedkeys(copilot_keys, "i", true)
+                else
+                    fallback()
+                end
+            end
+        end,
+        ['<C-Space>'] = cmp.mapping.complete(),
         -- ["<Tab>"] = cmp.mapping(function(fallback)
         --     if vim.fn.pumvisible() == 1 then
         --         if vim.fn["UltiSnips#CanExpandSnippet"]() == 1 or
