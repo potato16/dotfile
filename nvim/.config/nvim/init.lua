@@ -42,7 +42,7 @@ require('packer').startup(function()
   use 'SirVer/ultisnips' 	     -- for snippets
   use 'f-person/pubspec-assist-nvim' -- assist insert pubspec
   use 'f-person/nvim-sort-dart-imports' -- sort imports for dart
-  use 'nvim-treesitter/nvim-treesitter'
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'nvim-treesitter/playground' -- playground with treesitter
   use 'tamago324/compe-zsh' --zsh source for compe
   use 'kevinhwang91/nvim-bqf' -- quickfix better
@@ -130,8 +130,8 @@ vim.wo.signcolumn="yes"
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
--- vim.cmd[[colorscheme gruvbox]]
-vim.cmd[[colorscheme srcery]]
+vim.cmd[[colorscheme gruvbox]]
+-- vim.cmd[[colorscheme srcery]]
 
 --Remap tab on ultisnips so we can use tab for complete
 vim.g.UltiSnipsExpandTrigger="C-<tab>"
@@ -259,8 +259,8 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist({workspace = true})<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<esc><esc>', '<cmd>noh<CR>', opts)
 end
@@ -296,45 +296,15 @@ nvim_lsp.sumneko_lua.setup {
 }
 
 -- swift
-nvim_lsp.sourcekit.setup{}
+nvim_lsp.sourcekit.setup{
+	on_attach = on_attach
+}
 -- rust
-nvim_lsp.rust_analyzer.setup{}
+nvim_lsp.rust_analyzer.setup{
+	on_attach = on_attach
+}
 
 -- Setup flutter
--- require("flutter-tools").setup{
---   ui = {
---     -- the border type to use for all floating windows, the same options/formats
---     -- used for ":h nvim_open_win" e.g. "single" | "shadow" | {<table-of-eight-chars>}
---     border = "rounded",
---   },
-
---   debugger = { -- integrate with nvim dap
---     enabled = true,
---   },
---   flutter_path = vim.fn.getenv("FLUTTER").."/flutter",
---   -- flutter_lookup_cmd =vim.fn.getenv("FLUTTER").."/flutter", -- example "dirname $(which flutter)" or "asdf where flutter"
---   widget_guides = {
---     enabled = false,
---   },
---   closing_tags = {
---     -- highlight = "ErrorMsg", -- highlight for the closing tag
---     -- prefix = ">", -- character to use for close tag e.g. > Widget
---     enabled = true -- set to false to disable
---   },
---   dev_log = {
---     open_cmd = "tabedit", -- command to use to open the log buffer
---   },
---   outline = {
---     open_cmd = "30vnew", -- command to use to open the outline buffer
---   },
---   lsp = {
---     on_attach = on_attach,
---     settings = {
---       showTodos = true,
---       completeFunctionCalls = true,
---     }
---   }
--- }
 
 nvim_lsp.dartls.setup{
   cmd = { "dart", vim.fn.getenv("FLUTTER").."/cache/dart-sdk/bin/snapshots/analysis_server.dart.snapshot", "--lsp" };
@@ -353,8 +323,12 @@ nvim_lsp.dartls.setup{
   };
 }
 -- setup pyright
-nvim_lsp.pyright.setup{}
-nvim_lsp.bashls.setup{}
+nvim_lsp.pyright.setup{
+	on_attach = on_attach
+}
+nvim_lsp.bashls.setup{
+	on_attach = on_attach
+}
 
 -- setup gopls
 nvim_lsp.gopls.setup{

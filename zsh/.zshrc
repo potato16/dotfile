@@ -23,6 +23,9 @@ export CARGO_BIN="/Users/thaohan/.cargo/bin"
 export GEM_HOME=$HOME/.gem
 export RUBY_BIN="/opt/homebrew/opt/ruby/bin"
 export RBENV_ROOT="/usr/local/var/rbenv"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 if ! [[ $PATH == *"$FLUTTER"* ]]; then
