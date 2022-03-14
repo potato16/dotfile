@@ -18,15 +18,12 @@ vim.api.nvim_exec([[
 
 local use = require('packer').use
 require('packer').startup(function()
-  use 'wbthomason/packer.nvim'       -- Package manager
-  use 'github/copilot.vim'       -- copilot
-  use 'tpope/vim-fugitive'           -- Git commands in nvim
-  use 'tpope/vim-commentary'         -- "gc" to comment visual regions/lines
-  -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
-  -- UI to select things (files, grep results, open buffers...)
-  -- use 'nvim-lua/popup.nvim'
-  -- use 'nvim-lua/plenary.nvim'
-  use {'nvim-telescope/telescope.nvim', requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}} }
+  use 'wbthomason/packer.nvim'			-- Package manager
+  use 'github/copilot.vim'				-- copilot
+  use 'tpope/vim-fugitive'				-- Git commands in nvim
+  use 'tpope/vim-commentary'			-- "gc" to comment visual regions/lines
+  use 'tpope/vim-surround'			-- Surround text with delimiters
+  use 'tpope/vim-repeat'			-- Repeat last action
   use {'junegunn/fzf'}--, run =  "fzf#install()" }
   use 'junegunn/fzf.vim'
   use 'morhetz/gruvbox' -- gruvbox theme
@@ -35,9 +32,7 @@ require('packer').startup(function()
   use 'lukas-reineke/indent-blankline.nvim'
   use 'neovim/nvim-lspconfig'        -- Collection of configurations for built-in LSP client
   use 'onsails/lspkind-nvim'        -- Collection of configurations for built-in LSP client
-  -- use 'hrsh7th/nvim-compe'           -- Autocompletion plugin
   use 'dart-lang/dart-vim-plugin'    -- filetype detection, syntax highlighting, and indentation for Dart code in Vim.
-  -- use 'akinsho/flutter-tools.nvim'   -- flutter-tools
   use 'mfussenegger/nvim-dap' -- debug tool
   use 'SirVer/ultisnips' 	     -- for snippets
   use 'f-person/pubspec-assist-nvim' -- assist insert pubspec
@@ -64,29 +59,11 @@ require('packer').startup(function()
 		'f3fora/cmp-spell', 'hrsh7th/cmp-emoji'
 	}
   }
-  -- use {
-	-- 'tzachar/cmp-tabnine',
-	-- run = './install.sh',
-	-- requires = 'hrsh7th/nvim-cmp'
-  -- }
-  -- use 'kdheepak/lazygit.nvim' -- call lazygit in vim
-  -- use 'ray-x/lsp_signature.nvim' -- signature pop up help
   use {
   'kyazdani42/nvim-tree.lua', -- file manager
   requires = "kyazdani42/nvim-web-devicons",
   }
-  -- use {
-  -- "folke/trouble.nvim",
-  -- requires = "kyazdani42/nvim-web-devicons",
-  -- config = function()
-  --   require("trouble").setup {
-		-- auto_open = false, -- automatically open the list when you have diagnostics
-		-- auto_close = true, -- automatically close the list when you have no diagnostics
-		-- auto_preview = true, -- automatyically preview the location of the diagnostic. <esc> to close preview and go back to last window
-		-- auto_fold = false,
-  --   }
-  -- end
-  -- }
+  use {'psf/black', tag='stable'}   -- python format
 end)
 
 
@@ -175,55 +152,9 @@ end
 
 vim.api.nvim_set_keymap('n', '<F10>', '<cmd>lua ToggleMouse()<cr>', { noremap = true })
 
--- Telescope
--- local trouble = require("trouble.providers.telescope")
--- require('telescope').setup {
---   defaults = {
---     mappings = {
---       i = {
---         ["<C-u>"] = false,
---         ["<C-d>"] = false,
---       },
--- 	  n = { ["<c-t>"] = trouble.open_with_trouble },
---     },
---     -- generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
---     -- file_sorter =  require'telescope.sorters'.get_fzy_sorter,
---   }
--- }
 --Add leader shortcuts
--- vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>lua require('telescope.builtin').find_files()<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>FZF<cr>]], { noremap = true, silent = true})
--- vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>Buffers<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>l', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>t', [[<cmd>lua require('telescope.builtin').tags()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>o', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>gc', [[<cmd>lua require('telescope.builtin').git_commits()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>gb', [[<cmd>lua require('telescope.builtin').git_branches()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>gs', [[<cmd>lua require('telescope.builtin').git_status()<cr>]], { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>gp', [[<cmd>lua require('telescope.builtin').git_bcommits()<cr>]], { noremap = true, silent = true})
--- Trouble
--- vim.api.nvim_set_keymap("n", "<leader>xx", "<cmd>Trouble<cr>",
---   {silent = true, noremap = true}
--- )
--- vim.api.nvim_set_keymap("n", "<leader>xw", "<cmd>Trouble lsp_workspace_diagnostics<cr>",
---   {silent = true, noremap = true}
--- )
--- vim.api.nvim_set_keymap("n", "<leader>xd", "<cmd>Trouble lsp_document_diagnostics<cr>",
---   {silent = true, noremap = true}
--- )
--- vim.api.nvim_set_keymap("n", "<leader>xl", "<cmd>Trouble loclist<cr>",
---   {silent = true, noremap = true}
--- )
--- vim.api.nvim_set_keymap("n", "<leader>xq", "<cmd>Trouble quickfix<cr>",
---   {silent = true, noremap = true}
--- )
--- vim.api.nvim_set_keymap("n", "gR", "<cmd>Trouble lsp_references<cr>",
---   {silent = true, noremap = true}
--- )
 
 -- Change preview window location
 vim.g.splitbelow = true
@@ -475,17 +406,11 @@ vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {})
 -- " a list of groups can be found at `:help nvim_tree_highlight`
 -- highlight NvimTreeFolderIcon guibg=blue
 
----------------------- Trouble config --------------------------
--- jump to the next item, skipping the groups
--- require("trouble").next({skip_groups = true, jump = true});
-
--- jump to the previous item, skipping the groups
--- require("trouble").previous({skip_groups = true, jump = true});
--- setup cmp
 vim.g.copilot_no_tab_map = true
 vim.g.copilot_assume_mapped = true
 vim.g.copilot_tab_fallback = ""
 require('nvim-autopairs').setup{}
+-- setup cmp
 require("cmp_conf")
 require("lualine_conf")
 end

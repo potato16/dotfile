@@ -26,6 +26,8 @@ export RBENV_ROOT="/usr/local/var/rbenv"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# auto jump
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
 
 
 if ! [[ $PATH == *"$FLUTTER"* ]]; then
@@ -165,3 +167,6 @@ alias lg="lazygit"
 
 alias luamake=/Users/thaohan/dev/gitprojects/lua-language-server/3rd/luamake/luamake
 alias python="python3"
+
+eval $(thefuck --alias fuck)
+eval $(thefuck --alias fucks)
