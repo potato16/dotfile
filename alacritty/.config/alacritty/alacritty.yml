@@ -9,18 +9,18 @@ window:
     x: 0
     y: 0
 
-  startup_mode: Fullscreen
+  # startup_mode: Fullscreen
   # startup_mode: SimpleFullscreen
   position:
     x: 0
     y: 0
 
   padding:
-    x: 15
-    y: 15 
+    x: 8
+    y: 8
 
   dynamic_padding: false
-  # decorations: none
+  decorations: none
 
 scrolling:
   history: 50000
