@@ -65,6 +65,16 @@ require('packer').startup(function()
   }
   use {'psf/black', tag='stable'}   -- python format
   use 'reisub0/hot-reload.vim' -- hot reload flutter
+  use("petertriho/nvim-scrollbar") -- scrollbar
+  use {
+  "folke/trouble.nvim",
+  requires = "kyazdani42/nvim-web-devicons",
+  config = function()
+    require("trouble").setup {
+		mode = "document_diagnostics"
+    }
+  end
+}
 end)
 
 
@@ -397,6 +407,25 @@ require'nvim-tree'.setup {
 
 -- open nvim tree
 vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {})
+ -- setup key for trouble
+vim.api.nvim_set_keymap("n", "<leader>xx", "<cmd>Trouble<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xd", "<cmd>Trouble document_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xl", "<cmd>Trouble loclist<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xq", "<cmd>Trouble quickfix<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "gR", "<cmd>Trouble lsp_references<cr>",
+  {silent = true, noremap = true}
+)
 
 
 -- " a list of groups can be found at `:help nvim_tree_highlight`
@@ -406,6 +435,14 @@ vim.g.copilot_no_tab_map = true
 vim.g.copilot_assume_mapped = true
 vim.g.copilot_tab_fallback = ""
 require('nvim-autopairs').setup{}
+
+-- config scrollbar
+require('hlslens').setup({
+    calm_down = true,
+    nearest_only = true,
+    nearest_float_when = 'always'
+})
+require("scrollbar").setup()
 -- setup cmp
 require("cmp_conf")
 require("lualine_conf")
