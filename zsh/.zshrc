@@ -51,6 +51,10 @@ fi
 if ! [[ $PATH == *"$OPENSSL_HOME/bin"* ]]; then
   export PATH=$OPENSSL_HOME/bin:$PATH
 fi
+if ! [[ $PATH == *"$HOME/.pub-cache/bin"* ]]; then
+	export PATH="$PATH":"$HOME/.pub-cache/bin"
+fi
+
 # if ! [[ $PATH == *"$RUBY_BIN"* ]]; then
 #   export PATH=$RUBY_BIN:$PATH
 # fi
@@ -129,7 +133,7 @@ export FZF_DEFAULT_OPTS='--bind ctrl-n:down,ctrl-p:up'
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git flutter)
+plugins=(git flutter zsh-autosuggestions)
 
 
 source $ZSH/oh-my-zsh.sh

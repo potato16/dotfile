@@ -19,7 +19,6 @@ vim.api.nvim_exec([[
 local use = require('packer').use
 require('packer').startup(function()
   use 'wbthomason/packer.nvim'			-- Package manager
-  use 'github/copilot.vim'				-- copilot
   use 'tpope/vim-fugitive'				-- Git commands in nvim
   use 'tpope/vim-commentary'			-- "gc" to comment visual regions/lines
   use 'tpope/vim-surround'			-- Surround text with delimiters
@@ -44,7 +43,7 @@ require('packer').startup(function()
   use 'gennaro-tedesco/nvim-jqx' -- view json
   use {'kevinhwang91/nvim-hlslens'} -- search highlight
   use {'windwp/nvim-autopairs'} -- autopair
-  use {"npxbr/glow.nvim", run = "GlowInstall"} -- preview markdown
+  use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
   use {
   'nvim-lualine/lualine.nvim',
   requires = {'kyazdani42/nvim-web-devicons', opt = true}
@@ -64,7 +63,7 @@ require('packer').startup(function()
   requires = "kyazdani42/nvim-web-devicons",
   }
   use {'psf/black', tag='stable'}   -- python format
-  use 'reisub0/hot-reload.vim' -- hot reload flutter
+  use 'reisub0/hot-reload.vim' -- hot reload flutter when save
   use("petertriho/nvim-scrollbar") -- scrollbar
   use {
   "folke/trouble.nvim",
@@ -123,6 +122,10 @@ vim.cmd[[colorscheme gruvbox]]
 
 --Remap tab on ultisnips so we can use tab for complete
 vim.g.UltiSnipsExpandTrigger="C-<tab>"
+vim.g.UltiSnipsJumpForwardTrigger="<c-b>"
+vim.g.UltiSnipsJumpBackwardTrigger="<c-z>"
+vim.g.UltiSnipsSnippetsDir = "~/.vim/ultisnip"
+vim.g.UltiSnipsEditSplit="vertical"
 --Remap space as leader key
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent=true})
 vim.g.mapleader = " "
@@ -325,19 +328,19 @@ vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
 vim.o.completeopt="menu,menuone,noselect"
 
 -- format after save
+-- autocmd BufWritePre *.py Black
+-- autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
 vim.api.nvim_exec([[
   augroup FormatAfterSave
     autocmd!
 	autocmd BufWrite *.dart :DartSortImports
-    autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
 	autocmd BufWritePre *.go lua goimports(1000)
-	autocmd BufWritePre *.py Black
+	autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
   augroup end
 ]], false)
 ---------------NVIM TREE---------------------------------
 require'nvim-tree'.setup {
   hijack_cursor = true,
-  nvim_tree_respect_buf_cwd = false,
   update_cwd = false,
   actions = {
     open_file = {
@@ -364,10 +367,8 @@ require'nvim-tree'.setup {
   hijack_netrw        = true,
   -- open the tree when running this setup function
   open_on_setup       = false,
-  -- will not open on setup if the filetype is in this list
+  -- will not open on setup if the filetype is in this listtreesitter
   ignore_ft_on_setup  = {},
-  -- closes neovim automatically when the tree is the last **WINDOW** in the view
-  auto_close          = false,
   -- opens the tree when changing/opening a new tab if the tree wasn't previously opened
   open_on_tab         = false,
   -- configuration options for the system open command (`s` in the tree by default)
@@ -394,7 +395,6 @@ require'nvim-tree'.setup {
     -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
     side = 'left',
     -- if true the tree will resize itself after opening a file
-    auto_resize = false,
     mappings = {
       -- custom only false will merge the list with the default mappings
       -- if true, it will only use your list to set the mappings
@@ -404,6 +404,8 @@ require'nvim-tree'.setup {
     }
   }
 }
+
+require'nvim-treesitter.configs'.setup{}
 
 -- open nvim tree
 vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {})
@@ -427,13 +429,21 @@ vim.api.nvim_set_keymap("n", "gR", "<cmd>Trouble lsp_references<cr>",
   {silent = true, noremap = true}
 )
 
+local wr_group = vim.api.nvim_create_augroup('WinResize', { clear = true })
+
+vim.api.nvim_create_autocmd(
+    'VimResized',
+    {
+        group = wr_group,
+        pattern = '*',
+        command = 'wincmd =',
+        desc = 'Automatically resize windows when the host window size changes.'
+    }
+)
 
 -- " a list of groups can be found at `:help nvim_tree_highlight`
 -- highlight NvimTreeFolderIcon guibg=blue
 
-vim.g.copilot_no_tab_map = true
-vim.g.copilot_assume_mapped = true
-vim.g.copilot_tab_fallback = ""
 require('nvim-autopairs').setup{}
 
 -- config scrollbar
@@ -446,4 +456,5 @@ require("scrollbar").setup()
 -- setup cmp
 require("cmp_conf")
 require("lualine_conf")
+require("dap_conf")
 end

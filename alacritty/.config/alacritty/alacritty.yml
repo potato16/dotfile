@@ -10,7 +10,7 @@ window:
     y: 0
 
   # startup_mode: Fullscreen
-  startup_mode: SimpleFullscreen
+  # startup_mode: SimpleFullscreen
   position:
     x: 0
     y: 0
@@ -27,9 +27,10 @@ scrolling:
   multiplier: 3
 
 font:
-  size: 13
+  size: 14
   normal:
-    family: Hack Nerd Font
+    # family: Hack Nerd Font
+    family: ComicMono NF
 # Colors (Gruvbox dark)
 colors:
   primary:
