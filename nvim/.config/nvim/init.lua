@@ -92,9 +92,9 @@ vim.wo.relativenumber = true
 vim.o.hidden = true
 
 -- Some tab space
-vim.o.tabstop=4
-vim.o.softtabstop=4
-vim.o.shiftwidth=4
+vim.o.tabstop=2
+vim.o.softtabstop=2
+vim.o.shiftwidth=2
 
 
 --Enable mouse mode
@@ -173,6 +173,15 @@ vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>Buffers<cr>]], { noremap 
 -- Change preview window location
 vim.g.splitbelow = true
 
+-- add commentstring to tpope/vim-commentary
+vim.api.nvim_exec([[
+  augroup Commentary
+    autocmd!
+    autocmd FileType typescript setlocal commentstring={/*\ %s\ */}
+    autocmd FileType typescriptreact setlocal commentstring={/*\ %s\ */}
+  augroup end
+]], false)
+
 -- Highlight on yank
 vim.api.nvim_exec([[
   augroup YankHighlight
@@ -203,7 +212,7 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist({workspace = true})<CR>', opts)
@@ -239,9 +248,20 @@ nvim_lsp.sumneko_lua.setup {
       },
   },
 }
+-- vuejs
+nvim_lsp.vuels.setup{
+	on_attach = on_attach
+}
 
 -- swift
 nvim_lsp.sourcekit.setup{
+	on_attach = on_attach
+}
+-- javascript
+nvim_lsp.eslint.setup{
+	on_attach = on_attach
+}
+nvim_lsp.tsserver.setup{
 	on_attach = on_attach
 }
 -- rust
@@ -288,41 +308,23 @@ nvim_lsp.gopls.setup{
     },
   },
 }
-function goimports(timeout_ms)
-    local context = { only = { "source.organizeImports" } }
-    vim.validate { context = { context, "t", true } }
-
-    local params = vim.lsp.util.make_range_params()
-    params.context = context
-
-    -- See the implementation of the textDocument/codeAction callback
-    -- (lua/vim/lsp/handler.lua) for how to do this properly.
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
-    if not result or next(result) == nil then return end
-    local actions = result[1].result
-    if not actions then return end
-    local action = actions[1]
-
-    -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
-    -- is a CodeAction, it can have either an edit, a command or both. Edits
-    -- should be executed first.
-    if action.edit or type(action.command) == "table" then
-      if action.edit then
-        vim.lsp.util.apply_workspace_edit(action.edit)
-      end
-      if type(action.command) == "table" then
-        vim.lsp.buf.execute_command(action.command)
-      end
-    else
-      vim.lsp.buf.execute_command(action)
-    end
+---@diagnostic disable-next-line: lowercase-global
+function go_org_imports(wait_ms)
+	local params = vim.lsp.util.make_range_params()
+	params.context = {only = {"source.organizeImports"}}
+	local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
+	for cid, res in pairs(result or {}) do
+		for _, r in pairs(res.result or {}) do
+			if r.edit then
+				local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+				vim.lsp.util.apply_workspace_edit(r.edit, enc)
+			end
+		end
+	end
 end
 
-
-
-
 -- Map :Format to vim.lsp.buf.formatting()
-vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
+vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format()' ]])
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt="menu,menuone,noselect"
@@ -334,8 +336,9 @@ vim.api.nvim_exec([[
   augroup FormatAfterSave
     autocmd!
 	autocmd BufWrite *.dart :DartSortImports
-	autocmd BufWritePre *.go lua goimports(1000)
+	autocmd BufWritePre *.go lua go_org_imports()
 	autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
+	autocmd BufWritePre *.tsx,*.ts,*.jsx,*.js EslintFixAll
   augroup end
 ]], false)
 ---------------NVIM TREE---------------------------------

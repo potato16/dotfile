@@ -9,7 +9,7 @@ window:
     x: 0
     y: 0
 
-  # startup_mode: Fullscreen
+  startup_mode: Fullscreen
   # startup_mode: SimpleFullscreen
   position:
     x: 0
@@ -27,7 +27,7 @@ scrolling:
   multiplier: 3
 
 font:
-  size: 14
+  size: 14 
   normal:
     # family: Hack Nerd Font
     family: ComicMono NF
@@ -128,6 +128,7 @@ key_bindings:
     - { key: K,        mods: Alt,           chars: "\x1bk"                       }
     - { key: H,        mods: Alt,           chars: "\x1bh"                       }
     - { key: L,        mods: Alt,           chars: "\x1bl"                       }
+    - { key: L,        mods: Alt,           chars: "\x1bh"                       }
     - { key: T,        mods: Alt,           chars: "\x1bt"                       }
     - { key: W,        mods: Alt|Shift,     chars: "\x1bW"                       }
     - { key: P,        mods: Alt,           chars: "\x1bp"                       }
