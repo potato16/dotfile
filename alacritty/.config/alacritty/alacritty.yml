@@ -1,4 +1,5 @@
-window.opacity: 0.8
+window.opacity: 0.2
+opacity: 0.2
 window:
   dynamic_title: true
   dimensions:
@@ -9,15 +10,16 @@ window:
     x: 0
     y: 0
 
-  startup_mode: Fullscreen
+  startup_mode: Windowed
+  # startup_mode: Fullscreen
   # startup_mode: SimpleFullscreen
   position:
     x: 0
     y: 0
 
   padding:
-    x: 8
-    y: 8
+    x: 15
+    y: 15
 
   dynamic_padding: false
   decorations: none
@@ -128,7 +130,6 @@ key_bindings:
     - { key: K,        mods: Alt,           chars: "\x1bk"                       }
     - { key: H,        mods: Alt,           chars: "\x1bh"                       }
     - { key: L,        mods: Alt,           chars: "\x1bl"                       }
-    - { key: L,        mods: Alt,           chars: "\x1bh"                       }
     - { key: T,        mods: Alt,           chars: "\x1bt"                       }
     - { key: W,        mods: Alt|Shift,     chars: "\x1bW"                       }
     - { key: P,        mods: Alt,           chars: "\x1bp"                       }

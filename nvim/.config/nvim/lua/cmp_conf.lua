@@ -1,7 +1,9 @@
 local cmp = require('cmp')
-
 cmp.setup {
-
+		 window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
     formatting = {
         format = function(entry, vim_item)
             -- fancy icons and a name of kind
@@ -22,26 +24,23 @@ cmp.setup {
             return vim_item
         end
     },
-    mapping = {
-        ['<C-p>'] = cmp.mapping.select_prev_item(),
-        ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-e>'] = cmp.mapping.close(),
-        ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = true
-        }),
-		["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { "i", "s" }),
-		["<Tab>"] = function(fallback)
+		mapping = cmp.mapping.preset.insert({
+      ['<C-p>'] = cmp.mapping.select_prev_item(),
+      ['<C-n>'] = cmp.mapping.select_next_item(),
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+			["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { "i", "s" }),
+			["<Tab>"] = function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             else
                 fallback()
             end
         end,
-        ['<C-Space>'] = cmp.mapping.complete(),
-    },
+    }),
     snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},
     sources = {
         {name = 'buffer'}, {name = 'nvim_lsp'}, {name = "ultisnips"},
@@ -51,6 +50,32 @@ cmp.setup {
     },
     completion = {completeopt = 'menu,menuone,noinsert'}
 }
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+	sources = cmp.config.sources({
+		{ name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+	}, {
+		{ name = 'buffer' },
+	})
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = {
+		{ name = 'buffer' }
+	}
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = cmp.config.sources({
+		{ name = 'path' }
+	}, {
+		{ name = 'cmdline' }
+	})
+})
 
 -- Database completion
 vim.api.nvim_exec([[

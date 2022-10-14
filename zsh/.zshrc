@@ -2,6 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
+export LOCALBIN="/Users/thaohan/.local/bin"
 export ZSH="/Users/thaohan/.oh-my-zsh"
 export ANDROID_HOME="/Users/thaohan/Library/Android/sdk"
 export ANDROID_SDK_ROOT="/Users/thaohan/Library/Android/sdk"
@@ -15,7 +16,9 @@ export CPPFLAGS="-I/opt/homebrew/opt/openssl@1.1/include"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl@1.1/lib/pkgconfig"
 
 # export JAVA_HOME="/opt/homebrew/opt/openjdk"
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+export KOTLIN_LANGUAGE_SERVER="$HOME/kotlin-server/bin"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
 export EDITOR=nvim
 export GOLANG_BIN="/Users/thaohan/go/bin"
 export GOPATH="/Users/thaohan/go"
@@ -53,6 +56,12 @@ if ! [[ $PATH == *"$OPENSSL_HOME/bin"* ]]; then
 fi
 if ! [[ $PATH == *"$HOME/.pub-cache/bin"* ]]; then
 	export PATH="$PATH":"$HOME/.pub-cache/bin"
+fi
+if ! [[ $PATH == *"$KOTLIN_LANGUAGE_SERVER"* ]]; then
+  export PATH="$PATH:$KOTLIN_LANGUAGE_SERVER"
+fi
+if ! [[ $PATH == *"$LOCALBIN"* ]]; then
+  export PATH="$PATH:$LOCALBIN"
 fi
 
 # if ! [[ $PATH == *"$RUBY_BIN"* ]]; then

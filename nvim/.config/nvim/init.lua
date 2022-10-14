@@ -33,7 +33,6 @@ require('packer').startup(function()
   use 'onsails/lspkind-nvim'        -- Collection of configurations for built-in LSP client
   use 'dart-lang/dart-vim-plugin'    -- filetype detection, syntax highlighting, and indentation for Dart code in Vim.
   use 'mfussenegger/nvim-dap' -- debug tool
-  use 'SirVer/ultisnips' 	     -- for snippets
   use 'f-person/pubspec-assist-nvim' -- assist insert pubspec
   use 'f-person/nvim-sort-dart-imports' -- sort imports for dart
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -44,6 +43,7 @@ require('packer').startup(function()
   use {'kevinhwang91/nvim-hlslens'} -- search highlight
   use {'windwp/nvim-autopairs'} -- autopair
   use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
+  use {'ggandor/leap.nvim'} -- quick jump
   use {
   'nvim-lualine/lualine.nvim',
   requires = {'kyazdani42/nvim-web-devicons', opt = true}
@@ -51,11 +51,15 @@ require('packer').startup(function()
   -- Install nvim-cmp, and buffer source as a dependency
   use {
 	"hrsh7th/nvim-cmp",
+	commit = "99ef854322d0de9269044ee197b6c9ca14911d96",
 	requires = {
-		"hrsh7th/cmp-buffer", "hrsh7th/cmp-nvim-lsp",
-		'quangnguyen30192/cmp-nvim-ultisnips', 'hrsh7th/cmp-nvim-lua',
-		'octaltree/cmp-look', 'hrsh7th/cmp-path', 'hrsh7th/cmp-calc',
-		'f3fora/cmp-spell', 'hrsh7th/cmp-emoji'
+		'neovim/nvim-lspconfig',
+		'hrsh7th/cmp-nvim-lsp',
+		'hrsh7th/cmp-buffer',
+		'hrsh7th/cmp-path',
+		'hrsh7th/cmp-cmdline',
+		'SirVer/ultisnips',
+		'quangnguyen30192/cmp-nvim-ultisnips',
 	}
   }
   use {
@@ -164,6 +168,9 @@ ToggleMouse = function()
   end
 end
 
+-- leap
+require('leap').set_default_keymaps()
+
 vim.api.nvim_set_keymap('n', '<F10>', '<cmd>lua ToggleMouse()<cr>', { noremap = true })
 
 --Add leader shortcuts
@@ -177,8 +184,8 @@ vim.g.splitbelow = true
 vim.api.nvim_exec([[
   augroup Commentary
     autocmd!
-    autocmd FileType typescript setlocal commentstring={/*\ %s\ */}
-    autocmd FileType typescriptreact setlocal commentstring={/*\ %s\ */}
+    autocmd FileType typescript setlocal commentstring=/*\ %s\ */
+    autocmd FileType typescriptreact setlocal commentstring=/*\ %s\ */
   augroup end
 ]], false)
 
@@ -194,10 +201,10 @@ vim.api.nvim_exec([[
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true})
 --
 -- LSP settings
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local nvim_lsp = require('lspconfig')
 local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  -- require "lsp_signature".on_attach()
 
   local opts = { noremap=true, silent=true }
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -218,12 +225,6 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist({workspace = true})<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<esc><esc>', '<cmd>noh<CR>', opts)
 end
-
--- Enable the following language servers
--- local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', '', 'bashls' }
--- for _, lsp in ipairs(servers) do
---   nvim_lsp[lsp].setup { on_attach = on_attach }
--- end
 
 local sumneko_root_path = vim.fn.getenv("HOME").."/dev/projects/lua-language-server" -- Change to your sumneko root installation
 local sumneko_binary_path = "/bin/macOS/lua-language-server" -- Change to your OS specific output folder
@@ -250,30 +251,31 @@ nvim_lsp.sumneko_lua.setup {
 }
 -- vuejs
 nvim_lsp.vuels.setup{
-	on_attach = on_attach
+	on_attach = on_attach;
+	capabilities = capabilities;
 }
 
 -- swift
 nvim_lsp.sourcekit.setup{
-	on_attach = on_attach
+	on_attach = on_attach;
+	capabilities = capabilities;
 }
 -- javascript
-nvim_lsp.eslint.setup{
-	on_attach = on_attach
-}
 nvim_lsp.tsserver.setup{
-	on_attach = on_attach
+	on_attach = on_attach;
+	capabilities = capabilities;
 }
 -- rust
 nvim_lsp.rust_analyzer.setup{
-	on_attach = on_attach
+	on_attach = on_attach;
+	capabilities = capabilities;
 }
 
 -- Setup flutter
 
 nvim_lsp.dartls.setup{
   cmd = { "dart", vim.fn.getenv("FLUTTER").."/cache/dart-sdk/bin/snapshots/analysis_server.dart.snapshot", "--lsp" };
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities());
+	capabilities = capabilities;
   on_attach = on_attach;
   settings = {
     closingLabels  = true,
@@ -289,15 +291,23 @@ nvim_lsp.dartls.setup{
 }
 -- setup pyright
 nvim_lsp.pyright.setup{
-	on_attach = on_attach
+	on_attach = on_attach;
+	capabilities = capabilities;
 }
 nvim_lsp.bashls.setup{
-	on_attach = on_attach
+	on_attach = on_attach;
+	capabilities = capabilities;
+}
+ -- setup kotlin
+nvim_lsp.kotlin_language_server.setup{
+	on_attach = on_attach;
+	capabilities = capabilities;
 }
 
 -- setup gopls
 nvim_lsp.gopls.setup{
   on_attach = on_attach;
+	capabilities = capabilities;
   cmd = {"gopls", "serve"},
   settings = {
     gopls = {
@@ -338,7 +348,6 @@ vim.api.nvim_exec([[
 	autocmd BufWrite *.dart :DartSortImports
 	autocmd BufWritePre *.go lua go_org_imports()
 	autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
-	autocmd BufWritePre *.tsx,*.ts,*.jsx,*.js EslintFixAll
   augroup end
 ]], false)
 ---------------NVIM TREE---------------------------------
