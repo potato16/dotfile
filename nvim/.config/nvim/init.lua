@@ -1,5 +1,4 @@
 if not vim.g.vscode then
--- Edit from https://github.com/mjlbach/defaults.nvim
 -- Install packer
 local execute = vim.api.nvim_command
 
@@ -23,8 +22,6 @@ require('packer').startup(function()
   use 'tpope/vim-commentary'			-- "gc" to comment visual regions/lines
   use 'tpope/vim-surround'			-- Surround text with delimiters
   use 'tpope/vim-repeat'			-- Repeat last action
-  use {'junegunn/fzf'}--, run =  "fzf#install()" }
-  use 'junegunn/fzf.vim'
   use 'morhetz/gruvbox' -- gruvbox theme
   use 'srcery-colors/srcery-vim' -- srcery theme
   -- Add indentation guides even on blank lines
@@ -33,53 +30,58 @@ require('packer').startup(function()
   use 'onsails/lspkind-nvim'        -- Collection of configurations for built-in LSP client
   use 'dart-lang/dart-vim-plugin'    -- filetype detection, syntax highlighting, and indentation for Dart code in Vim.
   use 'mfussenegger/nvim-dap' -- debug tool
-  use 'f-person/pubspec-assist-nvim' -- assist insert pubspec
   use 'f-person/nvim-sort-dart-imports' -- sort imports for dart
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'nvim-treesitter/playground' -- playground with treesitter
-  use 'tamago324/compe-zsh' --zsh source for compe
-  use 'kevinhwang91/nvim-bqf' -- quickfix better
-  use 'gennaro-tedesco/nvim-jqx' -- view json
-  use {'kevinhwang91/nvim-hlslens'} -- search highlight
+  use { 'kevinhwang91/nvim-bqf' , ft = 'qf'} -- quickfix better
+	use {'junegunn/fzf', run = function()
+    vim.fn['fzf#install']()
+	end
+	}
+  use 'junegunn/fzf.vim'
   use {'windwp/nvim-autopairs'} -- autopair
   use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
-  use {'ggandor/leap.nvim'} -- quick jump
   use {
   'nvim-lualine/lualine.nvim',
   requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
   -- Install nvim-cmp, and buffer source as a dependency
   use {
-	"hrsh7th/nvim-cmp",
-	commit = "99ef854322d0de9269044ee197b6c9ca14911d96",
-	requires = {
-		'neovim/nvim-lspconfig',
-		'hrsh7th/cmp-nvim-lsp',
-		'hrsh7th/cmp-buffer',
-		'hrsh7th/cmp-path',
-		'hrsh7th/cmp-cmdline',
-		'SirVer/ultisnips',
-		'quangnguyen30192/cmp-nvim-ultisnips',
+		"hrsh7th/nvim-cmp",
+		commit = "99ef854322d0de9269044ee197b6c9ca14911d96",
+		requires = {
+			'neovim/nvim-lspconfig',
+			'hrsh7th/cmp-nvim-lsp',
+			'hrsh7th/cmp-buffer',
+			'hrsh7th/cmp-path',
+			'hrsh7th/cmp-cmdline',
+			'SirVer/ultisnips',
+			'quangnguyen30192/cmp-nvim-ultisnips',
+		}
+  }
+	use {
+		'nvim-tree/nvim-tree.lua',
+		requires = {
+			'nvim-tree/nvim-web-devicons', -- optional, for file icons
+		},
+		tag = 'nightly' -- optional, updated every week. (see issue #1193)
 	}
-  }
-  use {
-  'kyazdani42/nvim-tree.lua', -- file manager
-  requires = "kyazdani42/nvim-web-devicons",
-  }
   use {'psf/black', tag='stable'}   -- python format
   use 'reisub0/hot-reload.vim' -- hot reload flutter when save
-  use("petertriho/nvim-scrollbar") -- scrollbar
   use {
-  "folke/trouble.nvim",
-  requires = "kyazdani42/nvim-web-devicons",
+  'folke/trouble.nvim',
+  requires = 'kyazdani42/nvim-web-devicons',
   config = function()
-    require("trouble").setup {
-		mode = "document_diagnostics"
+    require('trouble').setup {
+		mode = 'document_diagnostics'
     }
   end
 }
 end)
 
+-- disable netrw at the very start of your init.lua (strongly advised)
+-- for config nvim-tree
+vim.g.loaded = 1
+vim.g.loaded_netrwPlugin = 1
 
 --Incremental live completion
 vim.o.inccommand = "nosplit"
@@ -109,6 +111,8 @@ vim.o.breakindent = true
 
 --Save undo history
 vim.cmd[[set undofile]]
+-- don't specify the * register
+vim.cmd[[set clipboard=unnamed]]
 
 --Case insensitive searching UNLESS /C or capital in search
 vim.o.ignorecase = true
@@ -350,77 +354,6 @@ vim.api.nvim_exec([[
 	autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
   augroup end
 ]], false)
----------------NVIM TREE---------------------------------
-require'nvim-tree'.setup {
-  hijack_cursor = true,
-  update_cwd = false,
-  actions = {
-    open_file = {
-      quit_on_open = true,
-    },
-    change_dir = {
-      enable = false,
-      global = false,
-    },
-  },
-  update_focused_file = {
-    enable = true,
-    update_cwd = false,
-    ignore_list = {},
-  },
-  git = {
-    enable = true,
-    ignore = false,
-    timeout = 500,
-  },
-  -- disables netrw completely
-  disable_netrw       = true,
-  -- hijack netrw window on startup
-  hijack_netrw        = true,
-  -- open the tree when running this setup function
-  open_on_setup       = false,
-  -- will not open on setup if the filetype is in this listtreesitter
-  ignore_ft_on_setup  = {},
-  -- opens the tree when changing/opening a new tab if the tree wasn't previously opened
-  open_on_tab         = false,
-  -- configuration options for the system open command (`s` in the tree by default)
-  system_open = {
-    -- the command to run this, leaving nil should work in most cases
-    cmd  = nil,
-    -- the command arguments as a list
-    args = {}
-  },
-   -- show lsp diagnostics in the signcolumn
-  diagnostics = {
-    enable = false,
-    icons = {
-      hint = "",
-      info = "",
-      warning = "",
-      error = "",
-    }
-  },
-
-  view = {
-    -- width of the window, can be either a number (columns) or a string in `%`
-    width = 30,
-    -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
-    side = 'left',
-    -- if true the tree will resize itself after opening a file
-    mappings = {
-      -- custom only false will merge the list with the default mappings
-      -- if true, it will only use your list to set the mappings
-      custom_only = false,
-      -- list of mappings to set on the tree manually
-      list = {}
-    }
-  }
-}
-
-require'nvim-treesitter.configs'.setup{}
-
--- open nvim tree
-vim.api.nvim_set_keymap("n", "<C-n>", ":NvimTreeToggle<CR>", {})
  -- setup key for trouble
 vim.api.nvim_set_keymap("n", "<leader>xx", "<cmd>Trouble<cr>",
   {silent = true, noremap = true}
@@ -458,14 +391,8 @@ vim.api.nvim_create_autocmd(
 
 require('nvim-autopairs').setup{}
 
--- config scrollbar
-require('hlslens').setup({
-    calm_down = true,
-    nearest_only = true,
-    nearest_float_when = 'always'
-})
-require("scrollbar").setup()
 -- setup cmp
+require("nvim_tree_conf")
 require("cmp_conf")
 require("lualine_conf")
 require("dap_conf")

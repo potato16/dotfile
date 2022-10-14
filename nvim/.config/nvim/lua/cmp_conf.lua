@@ -1,28 +1,23 @@
 local cmp = require('cmp')
+local lspkind = require('lspkind')
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 cmp.setup {
 		 window = {
       completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
     },
     formatting = {
-        format = function(entry, vim_item)
-            -- fancy icons and a name of kind
-            vim_item.kind = require("lspkind").presets.default[vim_item.kind] ..
-                                " " .. vim_item.kind
-            -- set a name for each source
-            vim_item.menu = ({
-                buffer = "[Buffer]",
-                nvim_lsp = "[LSP]",
-                ultisnips = "[UltiSnips]",
-                nvim_lua = "[Lua]",
-                look = "[Look]",
-                path = "[Path]",
-                spell = "[Spell]",
-                calc = "[Calc]",
-                emoji = "[Emoji]"
-            })[entry.source.name]
-            return vim_item
-        end
+				format = lspkind.cmp_format({
+					mode = 'symbol_text', -- show only symbol annotations
+					maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+					ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+
+					-- The function below will be called before any actual modifications from lspkind
+					-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+					before = function (entry, vim_item)
+						return vim_item
+					end
+			})
     },
 		mapping = cmp.mapping.preset.insert({
       ['<C-p>'] = cmp.mapping.select_prev_item(),
@@ -76,6 +71,11 @@ cmp.setup.cmdline(':', {
 		{ name = 'cmdline' }
 	})
 })
+-- If you want insert `(` after select function or method item
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done()
+)
 
 -- Database completion
 vim.api.nvim_exec([[
