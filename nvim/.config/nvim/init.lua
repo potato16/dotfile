@@ -19,10 +19,11 @@ local use = require('packer').use
 require('packer').startup(function()
   use 'wbthomason/packer.nvim'			-- Package manager
   use 'tpope/vim-fugitive'				-- Git commands in nvim
-  use 'tpope/vim-commentary'			-- "gc" to comment visual regions/lines
+  use 'numToStr/Comment.nvim'			-- "gc" to comment visual regions/lines
   use 'tpope/vim-surround'			-- Surround text with delimiters
   use 'tpope/vim-repeat'			-- Repeat last action
   use 'morhetz/gruvbox' -- gruvbox theme
+	use 'windwp/nvim-ts-autotag' -- autoclose and autorename html tag
   use 'srcery-colors/srcery-vim' -- srcery theme
   -- Add indentation guides even on blank lines
   use 'lukas-reineke/indent-blankline.nvim'
@@ -39,6 +40,7 @@ require('packer').startup(function()
 	}
   use 'junegunn/fzf.vim'
   use {'windwp/nvim-autopairs'} -- autopair
+
   use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
   use {
   'nvim-lualine/lualine.nvim',
@@ -52,6 +54,7 @@ require('packer').startup(function()
 			'neovim/nvim-lspconfig',
 			'hrsh7th/cmp-nvim-lsp',
 			'hrsh7th/cmp-buffer',
+			'hrsh7th/cmp-nvim-lua',
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
 			'SirVer/ultisnips',
@@ -68,14 +71,28 @@ require('packer').startup(function()
   use {'psf/black', tag='stable'}   -- python format
   use 'reisub0/hot-reload.vim' -- hot reload flutter when save
   use {
-  'folke/trouble.nvim',
-  requires = 'kyazdani42/nvim-web-devicons',
-  config = function()
-    require('trouble').setup {
-		mode = 'document_diagnostics'
-    }
-  end
-}
+		'folke/trouble.nvim',
+		requires = 'kyazdani42/nvim-web-devicons',
+		config = function()
+			require('trouble').setup {
+			mode = 'document_diagnostics'
+			}
+		end
+	}
+	use({
+		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		config = function()
+			require("lsp_lines").setup()
+		end,
+	})
+	use {
+		"nvim-neotest/neotest",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+			'sidlatau/neotest-dart',
+		}
+	}
 end)
 
 -- disable netrw at the very start of your init.lua (strongly advised)
@@ -111,7 +128,6 @@ vim.o.breakindent = true
 
 --Save undo history
 vim.cmd[[set undofile]]
--- don't specify the * register
 vim.cmd[[set clipboard=unnamed]]
 
 --Case insensitive searching UNLESS /C or capital in search
@@ -172,26 +188,26 @@ ToggleMouse = function()
   end
 end
 
--- leap
-require('leap').set_default_keymaps()
 
 vim.api.nvim_set_keymap('n', '<F10>', '<cmd>lua ToggleMouse()<cr>', { noremap = true })
 
 --Add leader shortcuts
 vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>FZF<cr>]], { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('n', '<leader>a', [[<cmd>Rg <c-r><c-w><cr>]], { noremap = true, silent = true})
+vim.cmd[[nnoremap <leader>a :Rg <c-r><c-w><cr>]]
 vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>Buffers<cr>]], { noremap = true, silent = true})
 
 -- Change preview window location
 vim.g.splitbelow = true
 
 -- add commentstring to tpope/vim-commentary
-vim.api.nvim_exec([[
-  augroup Commentary
-    autocmd!
-    autocmd FileType typescript setlocal commentstring=/*\ %s\ */
-    autocmd FileType typescriptreact setlocal commentstring=/*\ %s\ */
-  augroup end
-]], false)
+-- vim.api.nvim_exec([[
+--   augroup Commentary
+--     autocmd!
+--     autocmd FileType typescript setlocal commentstring=/*\ %s\ */
+--     autocmd FileType typescriptreact setlocal commentstring=/*\ %s\ */
+--   augroup end
+-- ]], false)
 
 -- Highlight on yank
 vim.api.nvim_exec([[
@@ -205,7 +221,7 @@ vim.api.nvim_exec([[
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true})
 --
 -- LSP settings
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 local nvim_lsp = require('lspconfig')
 local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -390,10 +406,21 @@ vim.api.nvim_create_autocmd(
 -- highlight NvimTreeFolderIcon guibg=blue
 
 require('nvim-autopairs').setup{}
-
+-- config lsp lines
+require("lsp_lines").setup()
+vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
+vim.keymap.set(
+  "",
+  "<Leader>l",
+  require("lsp_lines").toggle,
+  { desc = "Toggle lsp_lines" }
+)
+require('Comment').setup()
+-- neo test
 -- setup cmp
 require("nvim_tree_conf")
 require("cmp_conf")
 require("lualine_conf")
 require("dap_conf")
+require("neotest_conf")
 end

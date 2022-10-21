@@ -137,3 +137,4 @@ key_bindings:
     - { key: D,        mods: Alt,           chars: "\x1bd"                       }
     - { key: E,        mods: Alt,           chars: "\x1be"                       }
     - { key: X,        mods: Alt|Shift,     chars: "\x1bX"                       }
+    - { key: 36,       mods: Command,       action: ToggleFullscreen             }

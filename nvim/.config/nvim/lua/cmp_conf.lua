@@ -3,8 +3,8 @@ local lspkind = require('lspkind')
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 cmp.setup {
 		 window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
     },
     formatting = {
 				format = lspkind.cmp_format({
@@ -14,9 +14,9 @@ cmp.setup {
 
 					-- The function below will be called before any actual modifications from lspkind
 					-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-					before = function (entry, vim_item)
-						return vim_item
-					end
+					-- before = function (entry, vim_item)
+					-- 	return vim_item
+					-- end
 			})
     },
 		mapping = cmp.mapping.preset.insert({
@@ -38,12 +38,22 @@ cmp.setup {
     }),
     snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},
     sources = {
-        {name = 'buffer'}, {name = 'nvim_lsp'}, {name = "ultisnips"},
-        {name = "nvim_lua"}, {name = "look"}, {name = "path"},
-      {name = "calc"}, {name = "spell"},
+        {name = 'buffer'},
+				{name = 'nvim_lsp'},
+				{name = "ultisnips"},
+        {name = "nvim_lua"},
+				{name = "look"},
+				{name = "path"},
+				{name = "calc"},
+				{name = "spell"},
         {name = "emoji"}
     },
-    completion = {completeopt = 'menu,menuone,noinsert'}
+    completion = {completeopt = 'menu,menuone,noinsert'},
+		experimental= {
+			native_menu=false,
+			ghost_text = true,
+		}
+
 }
 -- Set configuration for specific filetype.
 cmp.setup.filetype('gitcommit', {
