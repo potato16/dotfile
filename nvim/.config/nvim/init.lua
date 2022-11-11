@@ -40,12 +40,11 @@ require('packer').startup(function()
 	}
   use 'junegunn/fzf.vim'
   use {'windwp/nvim-autopairs'} -- autopair
+  use {'phelipetls/jsonpath.nvim'} -- json path view
 
   use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
-  use {
-  'nvim-lualine/lualine.nvim',
-  requires = {'kyazdani42/nvim-web-devicons', opt = true}
-  }
+  use {'kyazdani42/nvim-web-devicons', opt = true}
+  use {'nvim-lualine/lualine.nvim'}
   -- Install nvim-cmp, and buffer source as a dependency
   use {
 		"hrsh7th/nvim-cmp",
@@ -63,19 +62,14 @@ require('packer').startup(function()
   }
 	use {
 		'nvim-tree/nvim-tree.lua',
-		requires = {
-			'nvim-tree/nvim-web-devicons', -- optional, for file icons
-		},
 		tag = 'nightly' -- optional, updated every week. (see issue #1193)
 	}
   use {'psf/black', tag='stable'}   -- python format
   use 'reisub0/hot-reload.vim' -- hot reload flutter when save
   use {
 		'folke/trouble.nvim',
-		requires = 'kyazdani42/nvim-web-devicons',
 		config = function()
 			require('trouble').setup {
-			mode = 'document_diagnostics'
 			}
 		end
 	}
@@ -115,9 +109,12 @@ vim.wo.relativenumber = true
 vim.o.hidden = true
 
 -- Some tab space
-vim.o.tabstop=2
-vim.o.softtabstop=2
+vim.o.tabstop=4
+vim.o.softtabstop=0
 vim.o.shiftwidth=2
+vim.cmd[[set expandtab]]
+vim.cmd[[set autoindent]]
+vim.cmd[[set smarttab]]
 
 
 --Enable mouse mode
@@ -128,7 +125,7 @@ vim.o.breakindent = true
 
 --Save undo history
 vim.cmd[[set undofile]]
-vim.cmd[[set clipboard=unnamed]]
+-- vim.cmd[[set clipboard=unnamed]]
 
 --Case insensitive searching UNLESS /C or capital in search
 vim.o.ignorecase = true
@@ -423,4 +420,5 @@ require("cmp_conf")
 require("lualine_conf")
 require("dap_conf")
 require("neotest_conf")
+require("json_path_visualize")
 end

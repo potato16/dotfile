@@ -31,8 +31,6 @@
                                                {:set ["yabai-scale-mode" 0]}
                                                {:set ["spec-mode" 0]}]
                                      :condi   [:!comma-mode :!period-mode]}
-             :yabai-move-mode       {:key :f :condi :tab-mode}
-             :yabai-scale-mode      {:key :c :condi :tab-mode}
              :spec-mode             {:key :s :condi :tab-mode}
              ;; :yabai
              :period-mode           {:key :period :afterup {:set ["period-comma-mode" 0]} :condi [:!emacs-s-mode :!tmux-windmove-mode :!k2-mode]}

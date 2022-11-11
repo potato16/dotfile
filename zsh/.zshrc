@@ -10,28 +10,41 @@ export FLUTTER_ROOT="/Users/thaohan/dev/projects/flutter"
 export FLUTTER="/Users/thaohan/dev/projects/flutter/bin"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
+
 export OPENSSL_HOME="/opt/homebrew/opt/openssl@1.1"
 export LDFLAGS="-L/opt/homebrew/opt/openssl@1.1/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/openssl@1.1/include"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl@1.1/lib/pkgconfig"
 
-# export JAVA_HOME="/opt/homebrew/opt/openjdk"
 export KOTLIN_LANGUAGE_SERVER="$HOME/kotlin-server/bin"
-# export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
 export EDITOR=nvim
+export RBENV_ROOT="$HOME/.rbenv"
+export RBENV_SHIM="$HOME/.rbenv/shims"
 export GOLANG_BIN="/Users/thaohan/go/bin"
 export GOPATH="/Users/thaohan/go"
 export CARGO_BIN="/Users/thaohan/.cargo/bin"
-export GEM_HOME=$HOME/.gem
-export RUBY_BIN="/opt/homebrew/opt/ruby/bin"
-export RBENV_ROOT="/usr/local/var/rbenv"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # auto jump
 [ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
 
+if ! [[ $PATH == *"$ANDROID_SDK_ROOT/emulator"* ]]; then
+  export PATH="$PATH:$ANDROID_SDK_ROOT/emulator"
+fi
+if ! [[ $PATH == *"$ANDROID_SDK_ROOT/tools"* ]]; then
+  export PATH="$PATH:$ANDROID_SDK_ROOT/tools"
+fi
+if ! [[ $PATH == *"$ANDROID_SDK_ROOT/tools/bin"* ]]; then
+  export PATH="$PATH:$ANDROID_SDK_ROOT/tools/bin"
+fi
+if ! [[ $PATH == *"$ANDROID_SDK_ROOT/platform-tools"* ]]; then
+  export PATH="$PATH:$ANDROID_SDK_ROOT/platform-tools"
+fi
 
 if ! [[ $PATH == *"$FLUTTER"* ]]; then
   export PATH="$PATH:$FLUTTER"
@@ -48,8 +61,8 @@ fi
 if ! [[ $PATH == *"$CARGO_BIN"* ]]; then
   export PATH="$PATH:$CARGO_BIN"
 fi
-if ! [[ $PATH == *"$GEM_HOME"* ]]; then
-  export PATH=$GEM_HOME/bin:$PATH
+if ! [[ $PATH == *"$RBENV_SHIM"* ]]; then
+  export PATH=$RBENV_SHIM/bin:$PATH
 fi
 if ! [[ $PATH == *"$OPENSSL_HOME/bin"* ]]; then
   export PATH=$OPENSSL_HOME/bin:$PATH
@@ -183,3 +196,5 @@ alias python="python3"
 
 eval $(thefuck --alias fuck)
 eval $(thefuck --alias fucks)
+eval "$(rbenv init - zsh)"
+
