@@ -48,7 +48,7 @@ require('packer').startup(function()
   -- Install nvim-cmp, and buffer source as a dependency
   use {
 		"hrsh7th/nvim-cmp",
-		commit = "99ef854322d0de9269044ee197b6c9ca14911d96",
+		-- commit = "99ef854322d0de9269044ee197b6c9ca14911d96",
 		requires = {
 			'neovim/nvim-lspconfig',
 			'hrsh7th/cmp-nvim-lsp',
@@ -87,6 +87,9 @@ require('packer').startup(function()
 			'sidlatau/neotest-dart',
 		}
 	}
+    use {
+      'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    }
 end)
 
 -- disable netrw at the very start of your init.lua (strongly advised)
@@ -189,10 +192,16 @@ end
 vim.api.nvim_set_keymap('n', '<F10>', '<cmd>lua ToggleMouse()<cr>', { noremap = true })
 
 --Add leader shortcuts
-vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>FZF<cr>]], { noremap = true, silent = true})
--- vim.api.nvim_set_keymap('n', '<leader>a', [[<cmd>Rg <c-r><c-w><cr>]], { noremap = true, silent = true})
-vim.cmd[[nnoremap <leader>a :Rg <c-r><c-w><cr>]]
-vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>Buffers<cr>]], { noremap = true, silent = true})
+local tele = require('telescope.builtin')
+
+vim.keymap.set('n', '<leader>f', tele.find_files, {})
+vim.keymap.set('n', '<leader><space>',function() tele.buffers({sort_mru = true}) end, {})
+vim.keymap.set('n', '<leader>aa', function() tele.grep_string({search = vim.fn.expand("<cword>")}) end, {})
+vim.keymap.set('n', '<leader>as',  tele.live_grep, {})
+
+-- vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>FZF<cr>]], { noremap = true, silent = true})
+-- vim.cmd[[nnoremap <leader>a :Rg <c-r><c-w><cr>]]
+-- vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>Buffers<cr>]], { noremap = true, silent = true})
 
 -- Change preview window location
 vim.g.splitbelow = true
