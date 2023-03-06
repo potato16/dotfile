@@ -36,11 +36,21 @@ cmp.setup {
             end
         end,
     }),
-    snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},
+    -- snippet = {expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end},
+    snippet = {
+        expand = function(args)
+            local luasnip = require("luasnip")
+            if not luasnip then
+                return
+            end
+            luasnip.lsp_expand(args.body)
+        end,
+    },
     sources = {
         {name = 'buffer'},
 				{name = 'nvim_lsp'},
 				{name = "ultisnips"},
+				{name = "luasnip"},
         {name = "nvim_lua"},
 				{name = "look"},
 				{name = "path"},

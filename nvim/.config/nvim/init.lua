@@ -34,7 +34,7 @@ require('packer').startup(function()
   use 'f-person/nvim-sort-dart-imports' -- sort imports for dart
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use { 'kevinhwang91/nvim-bqf' , ft = 'qf'} -- quickfix better
-	use {'junegunn/fzf', run = function()
+  use {'junegunn/fzf', run = function()
     vim.fn['fzf#install']()
 	end
 	}
@@ -45,10 +45,17 @@ require('packer').startup(function()
   use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
   use {'kyazdani42/nvim-web-devicons', opt = true}
   use {'nvim-lualine/lualine.nvim'}
+  use {'wakatime/vim-wakatime'}
+  use({
+	"L3MON4D3/LuaSnip",
+	-- follow latest release.
+	tag = "v1.2.1",
+	-- install jsregexp (optional!:).
+	run = "make install_jsregexp"
+})
   -- Install nvim-cmp, and buffer source as a dependency
   use {
 		"hrsh7th/nvim-cmp",
-		-- commit = "99ef854322d0de9269044ee197b6c9ca14911d96",
 		requires = {
 			'neovim/nvim-lspconfig',
 			'hrsh7th/cmp-nvim-lsp',
@@ -56,16 +63,17 @@ require('packer').startup(function()
 			'hrsh7th/cmp-nvim-lua',
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
-			'SirVer/ultisnips',
-			'quangnguyen30192/cmp-nvim-ultisnips',
+			-- 'SirVer/ultisnips',
+			-- 'quangnguyen30192/cmp-nvim-ultisnips',
+            'saadparwaiz1/cmp_luasnip',
 		}
   }
-	use {
+  use {
 		'nvim-tree/nvim-tree.lua',
 		tag = 'nightly' -- optional, updated every week. (see issue #1193)
 	}
   use {'psf/black', tag='stable'}   -- python format
-  use 'reisub0/hot-reload.vim' -- hot reload flutter when save
+  -- use 'reisub0/hot-reload.vim' -- hot reload flutter when save
   use {
 		'folke/trouble.nvim',
 		config = function()
@@ -73,23 +81,24 @@ require('packer').startup(function()
 			}
 		end
 	}
-	use({
+  use({
 		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
 		config = function()
 			require("lsp_lines").setup()
 		end,
-	})
-	use {
-		"nvim-neotest/neotest",
-		requires = {
-			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
-			'sidlatau/neotest-dart',
-		}
-	}
-    use {
-      'nvim-telescope/telescope.nvim', tag = '0.1.0',
-    }
+  })
+  use {
+      "nvim-neotest/neotest",
+      requires = {
+          "nvim-lua/plenary.nvim",
+          "nvim-treesitter/nvim-treesitter",
+          'sidlatau/neotest-dart',
+      }
+  }
+  use {
+     'nvim-telescope/telescope.nvim', tag = '0.1.0',
+  }
+  use {'mfussenegger/nvim-jdtls'} -- java lsp
 end)
 
 -- disable netrw at the very start of your init.lua (strongly advised)
@@ -145,11 +154,11 @@ vim.cmd[[colorscheme gruvbox]]
 -- vim.cmd[[colorscheme srcery]]
 
 --Remap tab on ultisnips so we can use tab for complete
-vim.g.UltiSnipsExpandTrigger="C-<tab>"
-vim.g.UltiSnipsJumpForwardTrigger="<c-b>"
-vim.g.UltiSnipsJumpBackwardTrigger="<c-z>"
-vim.g.UltiSnipsSnippetsDir = "~/.vim/ultisnip"
-vim.g.UltiSnipsEditSplit="vertical"
+-- vim.g.UltiSnipsExpandTrigger="C-<tab>"
+-- vim.g.UltiSnipsJumpForwardTrigger="<c-b>"
+-- vim.g.UltiSnipsJumpBackwardTrigger="<c-z>"
+-- vim.g.UltiSnipsSnippetsDir = "~/.vim/ultisnip"
+-- vim.g.UltiSnipsEditSplit="vertical"
 --Remap space as leader key
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent=true})
 vim.g.mapleader = " "
@@ -237,7 +246,7 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -254,7 +263,7 @@ end
 
 local sumneko_root_path = vim.fn.getenv("HOME").."/dev/projects/lua-language-server" -- Change to your sumneko root installation
 local sumneko_binary_path = "/bin/macOS/lua-language-server" -- Change to your OS specific output folder
-nvim_lsp.sumneko_lua.setup {
+nvim_lsp.lua_ls.setup {
   cmd = {sumneko_root_path .. sumneko_binary_path, "-E", sumneko_root_path.."/main.lua" };
   on_attach = on_attach,
   settings = {
@@ -373,7 +382,7 @@ vim.api.nvim_exec([[
     autocmd!
 	autocmd BufWrite *.dart :DartSortImports
 	autocmd BufWritePre *.go lua go_org_imports()
-	autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
+	autocmd BufWritePre *.dart lua vim.lsp.buf.format({async=true})
   augroup end
 ]], false)
  -- setup key for trouble
@@ -413,8 +422,12 @@ vim.api.nvim_create_autocmd(
 
 require('nvim-autopairs').setup{}
 -- config lsp lines
-require("lsp_lines").setup()
-vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
+vim.diagnostic.config({
+  virtual_text = false,
+  virtual_lines = {
+    only_current_line = true
+  }
+})
 vim.keymap.set(
   "",
   "<Leader>l",
@@ -430,4 +443,5 @@ require("lualine_conf")
 require("dap_conf")
 require("neotest_conf")
 require("json_path_visualize")
+require("luasnip_conf")
 end

@@ -18,9 +18,10 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl@1.1/lib/pkgconfig"
 
 export KOTLIN_LANGUAGE_SERVER="$HOME/kotlin-server/bin"
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
-# export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home"
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
+export SONAR_SCANNER="/Users/thaohan/sonar-scanner-4.7.0.2747-macosx/bin"
 export EDITOR=nvim
 export RBENV_ROOT="$HOME/.rbenv"
 export RBENV_SHIM="$HOME/.rbenv/shims"
@@ -75,6 +76,9 @@ if ! [[ $PATH == *"$KOTLIN_LANGUAGE_SERVER"* ]]; then
 fi
 if ! [[ $PATH == *"$LOCALBIN"* ]]; then
   export PATH="$PATH:$LOCALBIN"
+fi
+if ! [[ $PATH == *"$SONAR_SCANNER"* ]]; then
+  export PATH="$PATH:$SONAR_SCANNER"
 fi
 
 # if ! [[ $PATH == *"$RUBY_BIN"* ]]; then
@@ -198,3 +202,9 @@ eval $(thefuck --alias fuck)
 eval $(thefuck --alias fucks)
 eval "$(rbenv init - zsh)"
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/thaohan/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/thaohan/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/thaohan/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/thaohan/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
