@@ -29,6 +29,10 @@ export GOLANG_BIN="/Users/thaohan/go/bin"
 export GOPATH="/Users/thaohan/go"
 export CARGO_BIN="/Users/thaohan/.cargo/bin"
 export NVM_DIR="$HOME/.nvm"
+export PYENV_PYTHON="$HOME/.pyenv/shims"
+export GEM_HOME="$HOME/.rbenv/shims/gem"
+export GEM_PATH="$HOME/.rbenv/shims/gem"
+
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 # auto jump
@@ -59,9 +63,6 @@ fi
 if ! [[ $PATH == *"$ANDROID_HOME"* ]]; then
   export PATH="$PATH:$ANDROID_HOME"
 fi
-if ! [[ $PATH == *"$CARGO_BIN"* ]]; then
-  export PATH="$PATH:$CARGO_BIN"
-fi
 if ! [[ $PATH == *"$RBENV_SHIM"* ]]; then
   export PATH=$RBENV_SHIM/bin:$PATH
 fi
@@ -79,6 +80,12 @@ if ! [[ $PATH == *"$LOCALBIN"* ]]; then
 fi
 if ! [[ $PATH == *"$SONAR_SCANNER"* ]]; then
   export PATH="$PATH:$SONAR_SCANNER"
+fi
+if ! [[ $PATH == *"$PYENV_PYTHON"* ]]; then
+  export PATH="$PATH:$PYENV_PYTHON"
+fi
+if ! [[ $PATH == *"$CARGO_BIN"* ]]; then
+  export PATH="$CARGO_BIN:$PATH"
 fi
 
 # if ! [[ $PATH == *"$RUBY_BIN"* ]]; then

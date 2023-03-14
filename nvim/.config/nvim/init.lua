@@ -305,6 +305,13 @@ nvim_lsp.rust_analyzer.setup{
 	on_attach = on_attach;
 	capabilities = capabilities;
 }
+-- toml cargo install --features lsp --locked taplo-cli
+nvim_lsp.taplo.setup{}
+-- css, tailwindcss
+nvim_lsp.tailwindcss.setup{
+	on_attach = on_attach;
+	capabilities = capabilities;
+}
 
 -- Setup flutter
 
