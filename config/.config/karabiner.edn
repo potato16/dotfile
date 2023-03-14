@@ -80,9 +80,10 @@
                       [:n [:open "/Applications/Notion.app"]]
                       [:s [:open "/Applications/Slack.app"]]
                       [:p [:open "/Applications/Postman.app"]]
+                      [:t [:open "/Applications/Telegram.app"]]
                       ]}
 ]
  :devices            {:macbook-internal [{:product_id 835 :vendor_id 1452}]
-                      :leopold          [{:vendor_id 2131 :product_id 308}]
+                      :leopold          [{:vendor_id 2131 :product_id 308}]}
  
- :simlayer-threshold 210}
+ :SIMLAYER-THRESHOLD 210}

@@ -31,8 +31,8 @@ yabai -m config active_window_opacity        1.0
 yabai -m config normal_window_opacity        0.90
 
 yabai -m config window_border                on
-yabai -m config window_border_width          6
-yabai -m config active_window_border_color   0xff504945
+yabai -m config window_border_width          1
+yabai -m config active_window_border_color   0xfffbf1c7
 yabai -m config normal_window_border_color   0xff24292e
 
 yabai -m config insert_feedback_color        0xffd75f5f
@@ -55,12 +55,38 @@ yabai -m config left_padding                 6
 yabai -m config right_padding                6
 yabai -m config window_gap                   6
 
+# Space labels
+yabai -m space 1 --label "main"
+yabai -m space 2 --label "brower"
+yabai -m space 3 --label "tool"
+yabai -m space 4 --label "chat"
+yabai -m space 5 --label "note"
+yabai -m space 5 --label "other"
+# assign app to space
+yabai -m rule --add app="^Alacritty$" space=1
+yabai -m rule --add app="^qemu$" space=1
+yabai -m rule --add app="^Firefox$" space=4
+yabai -m rule --add app="^Debug$" space=4
+yabai -m rule --add app="^Postman$" space=5
+yabai -m rule --add app="^Slack$" space=2
+yabai -m rule --add app="^Mail$" space=2
+yabai -m rule --add app="^Notion$" space=5
+yabai -m rule --add app="^Telegram$" space=6
+yabai -m rule --add app="^qBittorrent$" space=6
+yabai -m rule --add app="^Steam$" space=6
+yabai -m rule --add app="^Friend List$" space=6
+yabai -m rule --add app="^Edge$" space=6
+yabai -m rule --add app="^VLC$" space=6
+
 # float system preferences
-yabai -m rule --add app="^Telegram$" manage=off
-yabai -m rule --add app="^Telegram$" space=5
+yabai -m rule --add app="^System Preferences$" manage=off layer=above
+yabai -m rule --add app="^System Setting$" manage=off layer=above
+yabai -m rule --add app="^Karabiner$" manage=off layer=above
 
 yabai -m signal --add event=window_destroyed action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
 yabai -m signal --add event=application_terminated action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
 
+
 echo "yabai configuration loaded.."
+
 

@@ -42,4 +42,4 @@ vim.keymap.set({"i", "s"} , "<c-l>", function ()
   end
 end,{silent = true})
 
-require("luasnip.loaders.from_lua").load({paths =vim.fn.stdpath('config') .. '/lua/snippets',})
+require("luasnip.loaders.from_lua").lazy_load({paths =vim.fn.stdpath('config') .. '/lua/snippets',})

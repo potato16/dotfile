@@ -24,9 +24,19 @@ local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 return {
-   s("trig", c(1, {
- 	t("Ugh boring, a text node"),
- 	i(nil, "At least I can edit something now..."),
- 	f(function(args) return "Still only counts as text!!" end, {})
- }))
+  s('random',t('what')),
+  s('function',fmt([[
+    import React from 'react';
+    import {{ View }} from '@components';
+
+    function {classname}(): JSX.Element {{
+      return (<View>
+      </View>);
+    }}
+    export default {classname};
+  ]],{
+    classname = i(1,"MyComponent")
+  },{
+    repeat_duplicates = true
+  })),
 }

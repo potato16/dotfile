@@ -27,6 +27,10 @@ require('packer').startup(function()
   use 'srcery-colors/srcery-vim' -- srcery theme
   -- Add indentation guides even on blank lines
   use 'lukas-reineke/indent-blankline.nvim'
+  use {
+  'nvim-lualine/lualine.nvim',
+  requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+}
   use 'neovim/nvim-lspconfig'        -- Collection of configurations for built-in LSP client
   use 'onsails/lspkind-nvim'        -- Collection of configurations for built-in LSP client
   use 'dart-lang/dart-vim-plugin'    -- filetype detection, syntax highlighting, and indentation for Dart code in Vim.
@@ -43,8 +47,6 @@ require('packer').startup(function()
   use {'phelipetls/jsonpath.nvim'} -- json path view
 
   use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
-  use {'kyazdani42/nvim-web-devicons', opt = true}
-  use {'nvim-lualine/lualine.nvim'}
   use {'wakatime/vim-wakatime'}
   use({
 	"L3MON4D3/LuaSnip",
@@ -73,12 +75,15 @@ require('packer').startup(function()
 		tag = 'nightly' -- optional, updated every week. (see issue #1193)
 	}
   use {'psf/black', tag='stable'}   -- python format
+  use {'kyazdani42/nvim-web-devicons'}   -- python format
   -- use 'reisub0/hot-reload.vim' -- hot reload flutter when save
   use {
 		'folke/trouble.nvim',
+        requires = {
+        "kyazdani42/nvim-web-devicons", -- optional, for file icons
+        },
 		config = function()
-			require('trouble').setup {
-			}
+			require('trouble').setup {}
 		end
 	}
   use({
@@ -250,6 +255,9 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  vim.keymap.set('n', '<leader>fo', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)

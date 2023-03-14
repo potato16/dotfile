@@ -23,15 +23,15 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home"
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
 export SONAR_SCANNER="/Users/thaohan/sonar-scanner-4.7.0.2747-macosx/bin"
 export EDITOR=nvim
-export RBENV_ROOT="$HOME/.rbenv"
-export RBENV_SHIM="$HOME/.rbenv/shims"
+# export RBENV_ROOT="$HOME/.rbenv"
+# export RBENV_SHIM="$HOME/.rbenv/shims"
 export GOLANG_BIN="/Users/thaohan/go/bin"
 export GOPATH="/Users/thaohan/go"
 export CARGO_BIN="/Users/thaohan/.cargo/bin"
 export NVM_DIR="$HOME/.nvm"
 export PYENV_PYTHON="$HOME/.pyenv/shims"
-export GEM_HOME="$HOME/.rbenv/shims/gem"
-export GEM_PATH="$HOME/.rbenv/shims/gem"
+# export GEM_HOME="$HOME/.rbenv/shims/gem"
+# export GEM_PATH="$HOME/.rbenv/shims/gem"
 
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -63,9 +63,9 @@ fi
 if ! [[ $PATH == *"$ANDROID_HOME"* ]]; then
   export PATH="$PATH:$ANDROID_HOME"
 fi
-if ! [[ $PATH == *"$RBENV_SHIM"* ]]; then
-  export PATH=$RBENV_SHIM/bin:$PATH
-fi
+# if ! [[ $PATH == *"$RBENV_SHIM"* ]]; then
+#   export PATH=$RBENV_SHIM/bin:$PATH
+# fi
 if ! [[ $PATH == *"$OPENSSL_HOME/bin"* ]]; then
   export PATH=$OPENSSL_HOME/bin:$PATH
 fi
@@ -207,7 +207,6 @@ alias python="python3"
 
 eval $(thefuck --alias fuck)
 eval $(thefuck --alias fucks)
-eval "$(rbenv init - zsh)"
 
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -215,3 +214,10 @@ if [ -f '/Users/thaohan/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Use
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/thaohan/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/thaohan/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+# NNN_PLUG_PERSONAL='g:personal/convert2zoom;p:personal/echo'
+NNN_PLUG_WORK='j:work/prettyjson;d:work/foobar'
+NNN_PLUG_INLINE='e:!go run "$nnn"*'
+NNN_PLUG_DEFAULT='1:ipinfo;p:preview-tui;o:fzz;b:nbak;v:imgview'
+NNN_PLUG="$NNN_PLUG_WORK;$NNN_PLUG_DEFAULT;$NNN_PLUG_INLINE"
+export NNN_PLUG
+export NNN_OPENER='/Users/thaohan/.config/nnn/plugins/nuke'

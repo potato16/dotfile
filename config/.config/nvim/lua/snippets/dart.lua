@@ -59,4 +59,15 @@ return {
   },{
     repeat_duplicates = true
   })),
+  s({trig='stl',dscr="Flutter Stateless Widget"},fmt([[
+class {name} extends StatelessWidget {{
+  const {name}({{super.key}});
+
+  @override
+  Widget build(BuildContext context) {{
+    // TODO: implement build
+    throw UnimplementedError();
+  }}
+}}
+  ]],{name=i(1,"MyWidget")},{repeat_duplicates=true})),
 }

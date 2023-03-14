@@ -23,5 +23,7 @@ local conds = require("luasnip.extras.expand_conditions")
 local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
+
 return {
+  s('allhere',t('allhere'))
 }
