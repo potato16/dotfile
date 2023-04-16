@@ -23,8 +23,7 @@ require('packer').startup(function()
   use 'tpope/vim-surround'			-- Surround text with delimiters
   use 'tpope/vim-repeat'			-- Repeat last action
   use 'morhetz/gruvbox' -- gruvbox theme
-	use 'windwp/nvim-ts-autotag' -- autoclose and autorename html tag
-  use 'srcery-colors/srcery-vim' -- srcery theme
+  use 'windwp/nvim-ts-autotag' -- autoclose and autorename html tag
   -- Add indentation guides even on blank lines
   use 'lukas-reineke/indent-blankline.nvim'
   use {
@@ -93,17 +92,10 @@ require('packer').startup(function()
 		end,
   })
   use {
-      "nvim-neotest/neotest",
-      requires = {
-          "nvim-lua/plenary.nvim",
-          "nvim-treesitter/nvim-treesitter",
-          'sidlatau/neotest-dart',
-      }
-  }
-  use {
      'nvim-telescope/telescope.nvim', tag = '0.1.0',
   }
   use {'mfussenegger/nvim-jdtls'} -- java lsp
+  use "folke/neodev.nvim" -- setup for init.lua
 end)
 
 -- disable netrw at the very start of your init.lua (strongly advised)
@@ -157,6 +149,13 @@ vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
 vim.cmd[[colorscheme gruvbox]]
 -- vim.cmd[[colorscheme srcery]]
+-- Config autotag 
+require('nvim-treesitter.configs').setup{
+  autotag={
+    enable = true,
+  }
+}
+require('nvim-ts-autotag').setup()
 
 --Remap tab on ultisnips so we can use tab for complete
 -- vim.g.UltiSnipsExpandTrigger="C-<tab>"
@@ -255,7 +254,7 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  vim.keymap.set('n', '<leader>fo', function()
+  vim.keymap.set('n', '<leader>wf', function()
       vim.lsp.buf.format { async = true }
     end, opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
@@ -456,7 +455,6 @@ require("nvim_tree_conf")
 require("cmp_conf")
 require("lualine_conf")
 require("dap_conf")
-require("neotest_conf")
 require("json_path_visualize")
 require("luasnip_conf")
 end
