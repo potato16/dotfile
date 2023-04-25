@@ -18,6 +18,7 @@ vim.api.nvim_exec([[
 local use = require('packer').use
 require('packer').startup(function()
   use 'wbthomason/packer.nvim'			-- Package manager
+  use "nvim-lua/plenary.nvim" -- for what?
   use 'tpope/vim-fugitive'				-- Git commands in nvim
   use 'numToStr/Comment.nvim'			-- "gc" to comment visual regions/lines
   use 'tpope/vim-surround'			-- Surround text with delimiters
@@ -75,7 +76,7 @@ require('packer').startup(function()
 	}
   use {'psf/black', tag='stable'}   -- python format
   use {'kyazdani42/nvim-web-devicons'}   -- python format
-  -- use 'reisub0/hot-reload.vim' -- hot reload flutter when save
+  use 'reisub0/hot-reload.vim' -- hot reload flutter when save
   use {
 		'folke/trouble.nvim',
         requires = {
@@ -329,6 +330,14 @@ nvim_lsp.dartls.setup{
   settings = {
     closingLabels  = true,
     flutterOutline = true,
+    dart = {
+      analysisExcludedFolders={
+        vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
+        vim.fn.expand("$HOME/.pub-cache"),
+        vim.fn.expand("/opt/homebrew"),
+        vim.fn.expand("$HOME/tools/flutter"),
+      }
+    }
   };
   init_options = {
 	closingLabels = true,
