@@ -46,7 +46,11 @@ require('packer').startup(function()
   use {'windwp/nvim-autopairs'} -- autopair
   use {'phelipetls/jsonpath.nvim'} -- json path view
 
-  use {"npxbr/glow.nvim", run = ":GlowInstall"} -- preview markdown
+  use({
+      "iamcco/markdown-preview.nvim",
+      run = function() vim.fn["mkdp#util#install"]() end,
+  })
+
   use {'wakatime/vim-wakatime'}
   use({
 	"L3MON4D3/LuaSnip",
@@ -312,7 +316,22 @@ nvim_lsp.tsserver.setup{
 nvim_lsp.rust_analyzer.setup{
 	on_attach = on_attach;
 	capabilities = capabilities;
+    settings ={
+      ['rust-analyzer'] = {
+        files = {
+          excludeDirs = {
+             vim.fn.expand("$HOME/.cargo"),
+          }
+        }
+      }
+    }
 }
+-- local rt = require("rust-tools")
+-- rt.setup({
+--   server = {
+--     on_attach = on_attach;
+--   }
+-- })
 -- toml cargo install --features lsp --locked taplo-cli
 nvim_lsp.taplo.setup{}
 -- css, tailwindcss
