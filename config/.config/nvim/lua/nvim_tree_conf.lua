@@ -4,7 +4,7 @@ local view = require("nvim-tree.view")
 local config = {
     view = {
         adaptive_size = true,
-        side = "right",
+        side = "left",
     },
     actions = {
         open_file = {

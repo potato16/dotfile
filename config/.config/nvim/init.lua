@@ -69,8 +69,6 @@ require('packer').startup(function()
 			'hrsh7th/cmp-nvim-lua',
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
-			-- 'SirVer/ultisnips',
-			-- 'quangnguyen30192/cmp-nvim-ultisnips',
             'saadparwaiz1/cmp_luasnip',
 		}
   }
@@ -101,6 +99,7 @@ require('packer').startup(function()
   }
   use {'mfussenegger/nvim-jdtls'} -- java lsp
   use "folke/neodev.nvim" -- setup for init.lua
+  use "github/copilot.vim"
 end)
 
 -- disable netrw at the very start of your init.lua (strongly advised)
@@ -355,6 +354,7 @@ nvim_lsp.dartls.setup{
         vim.fn.expand("$HOME/.pub-cache"),
         vim.fn.expand("/opt/homebrew"),
         vim.fn.expand("$HOME/tools/flutter"),
+        vim.fn.expand("$HOME/dev/projects/flutter"),
       }
     }
   };
