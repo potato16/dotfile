@@ -99,7 +99,10 @@ require('packer').startup(function()
   }
   use {'mfussenegger/nvim-jdtls'} -- java lsp
   use "folke/neodev.nvim" -- setup for init.lua
-  use "github/copilot.vim"
+  use {
+    'stevearc/oil.nvim',
+    config = function() require('oil').setup() end
+  }
 end)
 
 -- disable netrw at the very start of your init.lua (strongly advised)
@@ -333,11 +336,11 @@ nvim_lsp.rust_analyzer.setup{
 -- })
 -- toml cargo install --features lsp --locked taplo-cli
 nvim_lsp.taplo.setup{}
--- css, tailwindcss
-nvim_lsp.tailwindcss.setup{
-	on_attach = on_attach;
-	capabilities = capabilities;
-}
+-- -- css, tailwindcss
+-- nvim_lsp.tailwindcss.setup{
+-- 	on_attach = on_attach;
+-- 	capabilities = capabilities;
+-- }
 
 -- Setup flutter
 
@@ -366,6 +369,9 @@ nvim_lsp.dartls.setup{
 	suggestFromUnimportedLibraries = true
   };
 }
+-- setup svelte
+nvim_lsp.svelte.setup{}
+
 -- setup pyright
 nvim_lsp.pyright.setup{
 	on_attach = on_attach;
@@ -485,4 +491,6 @@ require("lualine_conf")
 require("dap_conf")
 require("json_path_visualize")
 require("luasnip_conf")
+-- oil config
+vim.keymap.set("n", "-", require("oil").open, { desc = "Open parent directory" })
 end

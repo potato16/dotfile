@@ -31,8 +31,9 @@ scrolling:
 font:
   size: 14 
   normal:
-    # family: Hack Nerd Font
-    family: ComicMono NF
+    # family: ComicMono NF
+    # family: CommitMono
+    family: FantasqueSansM Nerd Font Mono
 # Colors (Gruvbox dark)
 colors:
   primary:
