@@ -57,7 +57,7 @@
                       [:f [:open "/Applications/Firefox.app"]]
                       [:v [:open "/Applications/Vieb.app"]]
                       [:n [:open "/Applications/Notion.app"]]
-                      [:s [:open "/Applications/Slack.app"]]
+                      [:s [:open "/Applications/Android Studio.app"]]
                       [:p [:open "/Applications/Postman.app"]]
                       [:t [:open "/Applications/Telegram.app"]]
                       ]}
