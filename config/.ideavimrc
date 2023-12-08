@@ -12,11 +12,15 @@ set clipboard+=ideaput
 set ignorecase smartcase
 
 set NERDTree
+set argtextobj
+set commentary
 
 if has('ide')
   " mappings and options that exist only in IdeaVim
   map <leader>wf <Action>(ReformatCode)
-  map <leader>e <Action>(ActivateProjectToolWindow)
+  " map <leader>e <Action>(ActivateProjectToolWindow)
+  " Open Project with file location
+  map <leader>e <Action>(SelectInProjectView)
   map [d <Action>(GotoPreviousError)
   map ]d <Action>(GotoNextError)
 
@@ -24,6 +28,7 @@ if has('ide')
   map <leader>ff <Action>(GotoFile)
   map <leader>fa <Action>(SearchEverywhere)
   map <leader>fs <Action>(GotoSymbol)
+  map <leader>fu <Action>(FindUsages)
   map <leader><leader> <Action>(RecentFiles)
   map <leader>as <Action>(FindInPath)
   " map <leader>fd <Action>(HelpDiagnosticTools)
@@ -55,6 +60,31 @@ if has('ide')
   map <leader>ca <Action>(ShowIntentionActions)
 
   " map <leader><leader>T <Action>(VimFindActionIdAction)
+  " easy window navigation
+  nnoremap <a-k> gT
+  nnoremap <a-j> gt
+  nnoremap <c-s-tab> gT
+  nnoremap <c-tab> gt
+
+  map g, <Action>(JumpToLastChange)
+  map g. <Action>(JumpToNextChange)
+  nmap g) <Action>(GotoNextElementUnderCaretUsage)
+  nmap g( <Action>(GotoPrevElementUnderCaretUsage)
+  " built-in navigation to navigated items works better
+  nmap <c-o> <Action>(Back)
+  nmap <c-i> <Action>(Forward)
+  " but preserve ideavim defaults
+  map g<c-o> <c-o>
+  map g<c-i> <c-i>
+  " run stuff
+  map <leader>cg <Action>(ChooseRunConfiguration)
+  map <leader>dg <Action>(ChooseDebugConfiguration)
+  map <leader>1 <Action>(Run)
+  map <leader>2 <Action>(Debug)
+  map <leader>0 <Action>(Stop)
+
+  map <leader>vd <Action>(ToggleDistractionFreeMode)
+  map <leader>vz <Action>(ToggleZenMode)
 
 else
   " some mappings for Vim/Neovim

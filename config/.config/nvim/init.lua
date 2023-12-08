@@ -425,12 +425,12 @@ vim.o.completeopt="menu,menuone,noselect"
 -- format after save
 -- autocmd BufWritePre *.py Black
 -- autocmd BufWritePre *.dart lua vim.lsp.buf.formatting_sync(nil,1000)
+	-- autocmd BufWrite *.dart :DartSortImports
+	-- autocmd BufWritePre *.dart lua vim.lsp.buf.format({async=true})
 vim.api.nvim_exec([[
   augroup FormatAfterSave
     autocmd!
-	autocmd BufWrite *.dart :DartSortImports
 	autocmd BufWritePre *.go lua go_org_imports()
-	autocmd BufWritePre *.dart lua vim.lsp.buf.format({async=true})
   augroup end
 ]], false)
  -- setup key for trouble

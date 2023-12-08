@@ -6,8 +6,12 @@ export LOCALBIN="/Users/thaohan/.local/bin"
 export ZSH="/Users/thaohan/.oh-my-zsh"
 export ANDROID_HOME="/Users/thaohan/Library/Android/sdk"
 export ANDROID_SDK_ROOT="/Users/thaohan/Library/Android/sdk"
-export FLUTTER_ROOT="/Users/thaohan/dev/projects/flutter"
-export FLUTTER="/Users/thaohan/dev/projects/flutter/bin"
+
+export FLUTTER_ROOT="/Users/Shared/flutter/flutter_3.3.5"
+export FLUTTER="/Users/Shared/Flutter/flutter_3.3.5/bin"
+# export FLUTTER_ROOT="/Users/thaohan/dev/projects/flutter"
+# export FLUTTER="/Users/thaohan/dev/projects/flutter/bin"
+
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
 
@@ -18,9 +22,11 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl@1.1/lib/pkgconfig"
 
 export KOTLIN_LANGUAGE_SERVER="$HOME/kotlin-server/bin"
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home"
+export JAVA_BIN="$JAVA_HOME/bin"
 export SONAR_SCANNER="/Users/thaohan/sonar-scanner-4.7.0.2747-macosx/bin"
 export EDITOR=nvim
 # export RBENV_ROOT="$HOME/.rbenv"
@@ -32,7 +38,7 @@ export NVM_DIR="$HOME/.nvm"
 export PYENV_PYTHON="$HOME/.pyenv/shims"
 # export GEM_HOME="$HOME/.rbenv/shims/gem"
 # export GEM_PATH="$HOME/.rbenv/shims/gem"
-#
+
 export NNN_FIFO=/tmp/nnn.fifo
 
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
